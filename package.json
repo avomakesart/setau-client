@@ -1,0 +1,55 @@
+{
+  "name": "setau",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@hookform/resolvers": "^0.1.0",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.3.2",
+    "@testing-library/user-event": "^7.1.2",
+    "animate.css": "^4.1.0",
+    "axios": "^0.19.2",
+    "emailjs-com": "^2.6.3",
+    "formik": "^2.1.5",
+    "mapbox-gl": "^1.11.1",
+    "moment": "^2.27.0",
+    "react": "^16.13.1",
+    "react-burger-menu": "^2.7.1",
+    "react-color": "^2.18.1",
+    "react-dom": "^16.13.1",
+    "react-hook-form": "^6.2.0",
+    "react-input-color": "^3.0.1",
+    "react-map-gl": "^5.2.7",
+    "react-modal": "^3.11.2",
+    "react-onclickoutside": "^6.9.0",
+    "react-router-dom": "^5.2.0",
+    "react-router-modal": "^2.0.0-rc3",
+    "react-scripts": "3.4.1",
+    "react-validation": "^3.0.7",
+    "styled-components": "^5.1.1",
+    "sweetalert2": "^9.17.1",
+    "validator": "^13.1.1",
+    "yup": "^0.29.2"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

@@ -24,6 +24,7 @@ import Register from '../components/auth/Register'
 import Profile from '../components/ui/Profile/Profile'
 import EditProfile from '../components/ui/Profile/EditProfile'
 
+// Admin Routes
 import AdminRoot from '../admin/components/ui/AdminRoot'
 import Home from '../admin/components/pages/Home/Home'
 import About from '../admin/components/pages/About/About'
@@ -33,12 +34,15 @@ import AddPost from '../admin/components/pages/BlogPost/AddPost'
 import EditPost from '../admin/components/pages/BlogPost/EditPost'
 import EditHome from '../admin/components/pages/Home/EditHome'
 import { UpdateTestimonial } from '../admin/components/pages/Home/Forms/Testimonials/UpdateTestimonial'
-import { UpdateHero } from '../admin/components/pages/Home/Forms/UpdateHero'
-import { UpdateValuesSection } from '../admin/components/pages/Home/Forms/UpdateValuesSections'
-import { UpdateIconValues } from '../admin/components/pages/Home/Forms/UpdateIconValues'
+import { UpdateHero } from '../admin/components/pages/Home/Forms/Hero/UpdateHero'
+import { UpdateValuesSection } from '../admin/components/pages/Home/Forms/Values/UpdateValuesSections'
+import { UpdateIconValues } from '../admin/components/pages/Home/Forms/Values/UpdateIconValues'
 import { UpdateCard } from '../admin/components/pages/Home/Forms/Cards/UpdateCard'
 import { UpdateSecondCard } from '../admin/components/pages/Home/Forms/Cards/UpdateSecondCard'
-import Testimonials from '../components/ui/Home/sections/Testimonials/Testimonials'
+import { UpdateThirdCard } from '../admin/components/pages/Home/Forms/Cards/UpdateThirdCard'
+import { UpdateIcons } from '../admin/components/pages/Home/Forms/ValuesIcons/UpdateIcons'
+import { UpdateCta } from '../admin/components/pages/Home/Forms/Cta/UpdateCta.js'
+import Testimonials from '../admin/components/pages/Home/Forms/Testimonials'
 
 export default function AppRouter() {
   const currentUser = AuthService.getCurrentUser()
@@ -128,6 +132,13 @@ export default function AppRouter() {
 
           <PrivateRoute
             exact
+            path="/pages/home/edit-values-icons/:id"
+            component={UpdateIcons}
+            isAuthenticated={!!currentUser}
+          />
+
+          <PrivateRoute
+            exact
             path="/pages/home/edit-card"
             component={UpdateCard}
             isAuthenticated={!!currentUser}
@@ -137,6 +148,20 @@ export default function AppRouter() {
             exact
             path="/pages/home/edit-second-card"
             component={UpdateSecondCard}
+            isAuthenticated={!!currentUser}
+          />
+
+          <PrivateRoute
+            exact
+            path="/pages/home/edit-third-card"
+            component={UpdateThirdCard}
+            isAuthenticated={!!currentUser}
+          />
+
+          <PrivateRoute
+            exact
+            path="/pages/home/edit-cta"
+            component={UpdateCta}
             isAuthenticated={!!currentUser}
           />
 

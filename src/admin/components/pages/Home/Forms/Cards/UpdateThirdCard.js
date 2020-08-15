@@ -15,7 +15,7 @@ import Navbar from '../../../../ui/Navbar/Navbar'
 import { SectionColumn } from '../../../../ui/Section/Section'
 import { Sidebar } from '../../../../../../components/ui/Sidebar/Sidebar'
 
-export const UpdateSecondCard = () => {
+export const UpdateThirdCard = () => {
   const [updateValues, setUpdateValues] = useState([])
   const [formValues, handleChange] = useForm({
     homepage_card_title: '',
@@ -39,7 +39,7 @@ export const UpdateSecondCard = () => {
     e.preventDefault()
     try {
       const resp = await fetchData(
-        `home_second_card/${id}`,
+        `home_third_card/${id}`,
         {
           homepage_card_title,
           homepage_card_desc,
@@ -68,7 +68,7 @@ export const UpdateSecondCard = () => {
 
     const getCardValues = async () => {
       try {
-        const resp = await fetchData(`home_second_card`, {
+        const resp = await fetchData(`home_third_card`, {
           signal: signal,
         })
         const vals = await resp.json()
@@ -90,21 +90,12 @@ export const UpdateSecondCard = () => {
       <Navbar />
       <SectionColumn>
         <Card>
-          <h4 className="center">Actualizar Segunda Tarjeta</h4>
+          <h4 className="center">Actualizar Tecer Tarjeta</h4>
           {updateValues.map((update) => (
             <CardBody key={update.id}>
-              <Input
-                id="second_homepage_card_img"
-                type="text"
-                name="homepage_card_img"
-                value={homepage_card_img}
-                label="Imagen:"
-                placeholder={update.homepage_card_img}
-                onChange={handleChange}
-              />
 
               <Input
-                id="second_homepage_card_title"
+                id="third_homepage_card_title"
                 type="text"
                 name="homepage_card_title"
                 value={homepage_card_title}
@@ -114,7 +105,7 @@ export const UpdateSecondCard = () => {
               />
 
               <TextArea
-                id="second_homepage_card_desc"
+                id="third_homepage_card_desc"
                 type="textarea"
                 name="homepage_card_desc"
                 value={homepage_card_desc}
@@ -125,7 +116,7 @@ export const UpdateSecondCard = () => {
               />
 
               <Input
-                id="second_homepage_card_button_text"
+                id="third_homepage_card_button_text"
                 type="text"
                 name="homepage_card_button_text"
                 value={homepage_card_button_text}
@@ -135,7 +126,7 @@ export const UpdateSecondCard = () => {
               />
 
               <Input
-                id="second_homepage_card_button_color"
+                id="third_homepage_card_button_color"
                 type="text"
                 name="homepage_card_button_color"
                 value={homepage_card_button_color}
@@ -171,6 +162,7 @@ export const UpdateSecondCard = () => {
           <NavLink to="/pages/home/edit-card">Primer Tarjeta</NavLink>
           <NavLink to="/pages/home/edit-second-card">Segunda Tarjeta</NavLink>
           <NavLink to="/pages/home/testimonials">Testimoniales</NavLink>
+          <NavLink to="/pages/home/edit-tercer-card">Tercer Tarjeta</NavLink>
         </Sidebar>
       </div>
     </>

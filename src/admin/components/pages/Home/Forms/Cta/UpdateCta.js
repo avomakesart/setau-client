@@ -3,7 +3,9 @@ import Swal from 'sweetalert2'
 import { fetchData } from '../../../../../../helpers/fetch'
 import { useForm } from '../../../../../../hooks/useForm'
 import Input from '../../../../../../components/ui/Input/Input'
-import TextArea from '../../../../../../components/ui/TextArea/TextArea'
+import Navbar from '../../../../ui/Navbar/Navbar'
+import { SectionColumn } from '../../../../ui/Section/Section'
+import { Sidebar } from '../../../../../../components/ui/Sidebar/Sidebar'
 import {
   Card,
   CardBody,
@@ -11,26 +13,23 @@ import {
   DisabledButton,
   NavLink,
 } from '../../Home.styles'
-import Navbar from '../../../../ui/Navbar/Navbar'
-import { SectionColumn } from '../../../../ui/Section/Section'
-import { Sidebar } from '../../../../../../components/ui/Sidebar/Sidebar'
 
-export const UpdateSecondCard = () => {
+export const UpdateCta = () => {
   const [updateValues, setUpdateValues] = useState([])
   const [formValues, handleChange] = useForm({
-    homepage_card_title: '',
-    homepage_card_desc: '',
-    homepage_card_button_text: '',
-    homepage_card_button_color: '',
-    homepage_card_img: '',
+    cta_button_color: '#ffffff',
+    cta_button_background_color: '#191919',
+    cta_button_text: '',
+    cta_subtitle: '',
+    cta_title: '',
   })
 
   const {
-    homepage_card_title,
-    homepage_card_desc,
-    homepage_card_button_text,
-    homepage_card_button_color,
-    homepage_card_img,
+    cta_button_color,
+    cta_button_background_color,
+    cta_button_text,
+    cta_subtitle,
+    cta_title,
   } = formValues
 
   const id = updateValues.map((value) => value.id)
@@ -39,19 +38,23 @@ export const UpdateSecondCard = () => {
     e.preventDefault()
     try {
       const resp = await fetchData(
-        `home_second_card/${id}`,
+        `homepage_cta/${id}`,
         {
-          homepage_card_title,
-          homepage_card_desc,
-          homepage_card_button_text,
-          homepage_card_button_color,
-          homepage_card_img,
+          cta_button_color,
+          cta_button_background_color,
+          cta_button_text,
+          cta_subtitle,
+          cta_title,
         },
         'PUT'
       )
       const body = await JSON.stringify(resp)
       if (body) {
-        Swal.fire('Correcto', `Se actualizo correctamente`, 'success').then(
+        Swal.fire(
+          'Correct',
+          `Se actualizaron el icono correctamente`,
+          'success'
+        ).then(
           setTimeout(() => {
             window.location.reload(true)
           }, 2000)
@@ -68,7 +71,7 @@ export const UpdateSecondCard = () => {
 
     const getCardValues = async () => {
       try {
-        const resp = await fetchData(`home_second_card`, {
+        const resp = await fetchData(`homepage_cta`, {
           signal: signal,
         })
         const vals = await resp.json()
@@ -90,66 +93,65 @@ export const UpdateSecondCard = () => {
       <Navbar />
       <SectionColumn>
         <Card>
-          <h4 className="center">Actualizar Segunda Tarjeta</h4>
+          <h4 className="center">Actualizar Acción del usuario</h4>
           {updateValues.map((update) => (
             <CardBody key={update.id}>
               <Input
-                id="second_homepage_card_img"
+                id="cta_title"
                 type="text"
-                name="homepage_card_img"
-                value={homepage_card_img}
-                label="Imagen:"
-                placeholder={update.homepage_card_img}
-                onChange={handleChange}
-              />
-
-              <Input
-                id="second_homepage_card_title"
-                type="text"
-                name="homepage_card_title"
-                value={homepage_card_title}
+                name="cta_title"
+                value={cta_title}
                 label="Titulo"
-                placeholder={update.homepage_card_title}
-                onChange={handleChange}
-              />
-
-              <TextArea
-                id="second_homepage_card_desc"
-                type="textarea"
-                name="homepage_card_desc"
-                value={homepage_card_desc}
-                label="Descripción:"
-                rows="5"
-                placeholder={update.homepage_card_desc}
+                placeholder={update.cta_title}
                 onChange={handleChange}
               />
 
               <Input
-                id="second_homepage_card_button_text"
+                id="cta_subtitle"
                 type="text"
-                name="homepage_card_button_text"
-                value={homepage_card_button_text}
+                name="cta_subtitle"
+                value={cta_subtitle}
+                label="Titulo"
+                placeholder={update.cta_subtitle}
+                onChange={handleChange}
+              />
+
+              <Input
+                id="cta_button_text"
+                type="text"
+                name="cta_button_text"
+                value={cta_button_text}
                 label="Texto del boton:"
-                placeholder={update.homepage_card_button_text}
+                placeholder={update.cta_button_text}
                 onChange={handleChange}
               />
 
               <Input
-                id="second_homepage_card_button_color"
-                type="text"
-                name="homepage_card_button_color"
-                value={homepage_card_button_color}
+                id="cta_button_color"
+                type="color"
+                name="cta_button_color"
+                value={cta_button_color}
                 label="Color del boton:"
-                placeholder={update.homepage_card_button_color}
+                placeholder={update.cta_button_color}
+                onChange={handleChange}
+              />
+
+              <Input
+                id="cta_button_background_color"
+                type="color"
+                name="cta_button_background_color"
+                value={cta_button_background_color}
+                label="Color de fondo del botón:"
+                placeholder={update.cta_button_background_color}
                 onChange={handleChange}
               />
 
               {
-                (homepage_card_title,
-                homepage_card_desc,
-                homepage_card_button_text,
-                homepage_card_button_color,
-                homepage_card_img ? (
+                (cta_button_color,
+                cta_button_background_color,
+                cta_button_text,
+                cta_subtitle,
+                cta_title ? (
                   <Button onClick={handleUpdate} type="submit">
                     Actulizar Tarjeta
                   </Button>

@@ -10,12 +10,12 @@ import {
 
 export const AddTestimonial = () => {
   const [formValues, handleChange] = useForm({
-    testimonial_desc: '',
-    testimonial_img: '',
-    testimonial_name: '',
+    testimonials_desc: '',
+    testimonials_img: '',
+    testimonials_name: '',
   })
 
-  const { testimonial_desc, testimonial_img, testimonial_name } = formValues
+  const { testimonials_desc, testimonials_img, testimonials_name } = formValues
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -23,9 +23,9 @@ export const AddTestimonial = () => {
       const resp = await fetchData(
         `testimonials`,
         {
-          testimonial_desc,
-          testimonial_img,
-          testimonial_name,
+          testimonials_desc,
+          testimonials_img,
+          testimonials_name,
         },
         'POST'
       )
@@ -48,10 +48,10 @@ export const AddTestimonial = () => {
   return (
     <div>
       <TextArea
-        id="testimonial_desc"
+        id="testimonials_desc"
         type="textarea"
-        name="testimonial_desc"
-        value={testimonial_desc}
+        name="testimonials_desc"
+        value={testimonials_desc}
         label="Descripción:"
         rows="5"
         placeholder="Descripción de testimonial"
@@ -59,29 +59,29 @@ export const AddTestimonial = () => {
       />
 
       <Input
-        id="testimonial_img"
+        id="testimonials_img"
         type="text"
-        name="testimonial_img"
-        value={testimonial_img}
+        name="testimonials_img"
+        value={testimonials_img}
         label="Imagen:"
         placeholder="Url de foto de cliente"
         onChange={handleChange}
       />
 
       <Input
-        id="testimonial_name"
+        id="testimonials_name"
         type="text"
-        name="testimonial_name"
-        value={testimonial_name}
+        name="testimonials_name"
+        value={testimonials_name}
         label="Nombre:"
         placeholder="Nombre del client"
         onChange={handleChange}
       />
 
       {
-        (testimonial_desc,
-        testimonial_img,
-        testimonial_name ? (
+        (testimonials_desc,
+        testimonials_img,
+        testimonials_name ? (
           <Button onClick={handleSubmit} type="submit">
             Agregar testimonial
           </Button>

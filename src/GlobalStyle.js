@@ -19,10 +19,6 @@ const GlobalStyle = createGlobalStyle`
   p {
     font-size: 18px;
     line-height: 1.334;
-    
-    @media (min-width: 521px) {
-      font-size: 1rem;
-    }
   }
   
   h1 {
@@ -77,6 +73,7 @@ const GlobalStyle = createGlobalStyle`
   border-color: rgba(64, 194, 133, 0.693);
   border-left: 0;
   }
+
   .side-bar {
   height: 100% !important;
   display: flex;

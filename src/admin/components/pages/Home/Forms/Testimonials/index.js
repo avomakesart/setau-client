@@ -1,8 +1,11 @@
 import React from 'react'
 import { TestimonialList } from './TestimonialList'
-import { Card } from '../../Home.styles'
+import { Card, CardBody, NavLink } from '../../Home.styles'
 import { ModalComponent } from '../../../../../../components/ui/Modal/ModalComponent'
 import { AddTestimonial } from './AddTestimonial'
+import Navbar from '../../../../ui/Navbar/Navbar'
+import { SectionColumn } from '../../../../ui/Section/Section'
+import { Sidebar } from '../../../../../../components/ui/Sidebar/Sidebar'
 
 const modalbuttonStyles = {
   color: '#fff',
@@ -23,14 +26,35 @@ const modalbuttonStyles = {
 
 export default function Testimonials() {
   return (
-    <Card>
-      <TestimonialList />
-      <ModalComponent
-        buttonText="Agregar Testimonial"
-        style={modalbuttonStyles}
-      >
-        <AddTestimonial />
-      </ModalComponent>
-    </Card>
+    <>
+      <Navbar />
+      <SectionColumn>
+        <h4>Agrega un nuevo testimonial</h4>
+        <Card>
+          <CardBody>
+            <ModalComponent
+              buttonText="Agregar Testimonial"
+              style={modalbuttonStyles}
+            >
+              <AddTestimonial />
+            </ModalComponent>
+          </CardBody>
+        </Card>
+        <h4>Lista de testimoniales</h4>
+        <TestimonialList />
+      </SectionColumn>
+      <div>
+        <Sidebar>
+          <NavLink to="/pages/home/edit-hero">Encabezado</NavLink>
+          <NavLink to="/pages/home/edit-values">Seccion Valores</NavLink>
+          <NavLink to="/pages/home/edit-values-icons">
+            Iconos de valores
+          </NavLink>
+          <NavLink to="/pages/home/edit-card">Primer Tarjeta</NavLink>
+          <NavLink to="/pages/home/edit-second-card">Segunda Tarjeta</NavLink>
+          <NavLink to="/pages/home/testimonials">Testimoniales</NavLink>
+        </Sidebar>
+      </div>
+    </>
   )
 }

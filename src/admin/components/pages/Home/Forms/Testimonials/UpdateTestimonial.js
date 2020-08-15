@@ -7,15 +7,17 @@ import TextArea from '../../../../../../components/ui/TextArea/TextArea'
 import {
   Button,
   DisabledButton,
-  Section,
   Container,
   Row,
   ColumnRow,
   Card,
   CardBody,
+  NavLink,
 } from '../../Home.styles'
 import { useParams, useHistory } from 'react-router-dom'
 import Navbar from '../../../../ui/Navbar/Navbar'
+import { SectionColumn } from '../../../../ui/Section/Section'
+import { Sidebar } from '../../../../../../components/ui/Sidebar/Sidebar'
 
 export const UpdateTestimonial = () => {
   const [updateValue, setUpdateValue] = useState([])
@@ -87,7 +89,7 @@ export const UpdateTestimonial = () => {
   return (
     <>
       <Navbar />
-      <Section>
+      <SectionColumn>
         <Container>
           <Row>
             <ColumnRow>
@@ -147,7 +149,19 @@ export const UpdateTestimonial = () => {
             </ColumnRow>
           </Row>
         </Container>
-      </Section>
+      </SectionColumn>
+      <div>
+        <Sidebar>
+          <NavLink to="/pages/home/edit-hero">Encabezado</NavLink>
+          <NavLink to="/pages/home/edit-values">Seccion Valores</NavLink>
+          <NavLink to="/pages/home/edit-values-icons">
+            Iconos de valores
+          </NavLink>
+          <NavLink to="/pages/home/edit-card">Primer Tarjeta</NavLink>
+          <NavLink to="/pages/home/edit-second-card">Segunda Tarjeta</NavLink>
+          <NavLink to="/pages/home/testimonials">Testimoniales</NavLink>
+        </Sidebar>
+      </div>
     </>
   )
 }

@@ -1,16 +1,22 @@
 import React, { useState, useEffect } from 'react'
 import Swal from 'sweetalert2'
 import { fetchData } from '../../../../../../helpers/fetch'
-import { CardBody, LinkButton, DangerButton } from '../../Home.styles'
+
 import {
-  Container,
-  TestimonialWrapper,
   TestimonialContainer,
   AvatarContainer,
   AvatarImage,
   NameContainer,
   TestimonialName,
 } from '../../../../../../components/ui/Home/sections/Testimonials/Testimonials.styles'
+
+import {
+  CardBody,
+  LinkButton,
+  DangerButton,
+  Card,
+  ButtonContainer,
+} from '../../Home.styles'
 
 export const TestimonialList = () => {
   const [testimonials, setTestimonials] = useState([])
@@ -34,25 +40,25 @@ export const TestimonialList = () => {
     }
   }, [])
 
+
   const handleDelete = async (id) => {
     Swal.fire({
       title: '¿Estas seguro?',
-      text: 'Ya no podras revertir esto',
+      text: "No podras revertir esto!",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: 'crimson',
       cancelButtonColor: 'black',
-      confirmButtonText: 'Si, borrar!',
+      confirmButtonText: 'Si, borralo!',
     }).then((result) => {
       if (result.value) {
         Swal.fire('Borrado!', 'El testimonial se a borrado.', 'success')
-        fetchData(`testimonials/${id}`, 'DELETE')
-        const filteredTestimonial = testimonials.filter(
-          (testimonial) => testimonial.id !== id
+        fetchData(`testimonials/${id}`, {}, 'DELETE')
+        const filteteredCustomerID = testimonials.filter(
+          (t) => t.id !== id
         )
-        setTestimonials(filteredTestimonial)
-        console.log(filteredTestimonial)
-        // window.location.reload(true)
+        setTestimonials(filteteredCustomerID)
+        window.location.reload(true)
       } else if (result.dismiss === Swal.DismissReason.cancel) {
         Swal.fire({
           title: 'Cancelado',
@@ -65,11 +71,11 @@ export const TestimonialList = () => {
   }
 
   return (
-    <CardBody>
-      <Container>
-        <TestimonialWrapper>
-          {testimonials.map((t) => (
-            <TestimonialContainer key={t.id}>
+    <>
+      {testimonials.map((t) => (
+        <Card key={t.id}>
+          <CardBody>
+            <TestimonialContainer>
               <p>{t.testimonials_desc}</p>
               <NameContainer>
                 <AvatarContainer>
@@ -80,16 +86,18 @@ export const TestimonialList = () => {
                 </AvatarContainer>
                 <TestimonialName>{t.testimonials_name}</TestimonialName>
               </NameContainer>
-              <LinkButton to={`/pages/edit-testimonial/${t.id}`}>
-                Actualizar Testimonial
-              </LinkButton>
-              <DangerButton onClick={() => handleDelete(t.id)}>
-                Eliminar Testimonial
-              </DangerButton>
+              <ButtonContainer>
+                <LinkButton to={`/pages/home/edit-testimonial/${t.id}`}>
+                  Actualizar Testimonial
+                </LinkButton>
+                <DangerButton type="button" onClick={() => handleDelete(t.id)}>
+                  Eliminar Testimonial
+                </DangerButton>
+              </ButtonContainer>
             </TestimonialContainer>
-          ))}
-        </TestimonialWrapper>
-      </Container>
-    </CardBody>
+          </CardBody>
+        </Card>
+      ))}
+    </>
   )
 }

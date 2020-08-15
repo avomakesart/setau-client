@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 export const SidebarWrapper = styled.div`
   position: fixed;
-  bottom: -12rem;
+  bottom: -12.5rem;
   right: 0;
   padding: 48px 0 0;
   box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.1);
@@ -16,7 +16,7 @@ export const SidebarContainer = styled.div`
   height: calc(100vh - 48px);
   padding-top: 0.5rem;
   overflow-x: hidden;
-  overflow-y: auto;
+  overflow-y: hidden;
 `
 
 export const NavContainer = styled.nav`

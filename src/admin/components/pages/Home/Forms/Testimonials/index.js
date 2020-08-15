@@ -1,11 +1,11 @@
 import React from 'react'
 import { TestimonialList } from './TestimonialList'
-import { Card, CardBody, NavLink } from '../../Home.styles'
+import { Card, CardBody } from '../../Home.styles'
 import { ModalComponent } from '../../../../../../components/ui/Modal/ModalComponent'
 import { AddTestimonial } from './AddTestimonial'
 import Navbar from '../../../../ui/Navbar/Navbar'
 import { SectionColumn } from '../../../../ui/Section/Section'
-import { Sidebar } from '../../../../../../components/ui/Sidebar/Sidebar'
+import EditMenu from '../../EditMenu'
 
 const modalbuttonStyles = {
   color: '#fff',
@@ -44,16 +44,7 @@ export default function Testimonials() {
         <TestimonialList />
       </SectionColumn>
       <div>
-        <Sidebar>
-          <NavLink to="/pages/home/edit-hero">Encabezado</NavLink>
-          <NavLink to="/pages/home/edit-values">Seccion Valores</NavLink>
-          <NavLink to="/pages/home/edit-values-icons">
-            Iconos de valores
-          </NavLink>
-          <NavLink to="/pages/home/edit-card">Primer Tarjeta</NavLink>
-          <NavLink to="/pages/home/edit-second-card">Segunda Tarjeta</NavLink>
-          <NavLink to="/pages/home/testimonials">Testimoniales</NavLink>
-        </Sidebar>
+        <EditMenu />
       </div>
     </>
   )

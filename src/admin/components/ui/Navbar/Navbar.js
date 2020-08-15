@@ -71,11 +71,11 @@ export default function Navbar() {
     },
     {
       id: 2,
-      value: <DropItem to="/pages/about">Pagina de Nosotros</DropItem>,
+      value: <DropItem to="/pages/nosotros">Pagina de Nosotros</DropItem>,
     },
     {
       id: 3,
-      value: <DropItem to="/pages/contact">Pagina de Contacto</DropItem>,
+      value: <DropItem to="/pages/contacto">Pagina de Contacto</DropItem>,
     },
   ];
 

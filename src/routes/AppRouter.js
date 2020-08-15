@@ -43,6 +43,15 @@ import { UpdateThirdCard } from '../admin/components/pages/Home/Forms/Cards/Upda
 import { UpdateIcons } from '../admin/components/pages/Home/Forms/ValuesIcons/UpdateIcons'
 import { UpdateCta } from '../admin/components/pages/Home/Forms/Cta/UpdateCta.js'
 import Testimonials from '../admin/components/pages/Home/Forms/Testimonials'
+import EditAbout from '../admin/components/pages/About/EditAbout'
+import { UpdateAboutCard } from '../admin/components/pages/About/Forms/Cards/UpdateAboutCard'
+import { UpdateAboutSecondCard } from '../admin/components/pages/About/Forms/Cards/UpdateAboutSecondCard'
+import TeamMembers from '../admin/components/pages/About/Forms/TeamMembers/TeamMembers'
+import { UpdateMember } from '../admin/components/pages/About/Forms/TeamMembers/UpdateMember'
+import { UpdateTeamSection } from '../admin/components/pages/About/Forms/TeamMembers/UpdateTeamSection'
+import Clients from '../admin/components/pages/About/Forms/Clients/Clients'
+import { UpdateClient } from '../admin/components/pages/About/Forms/Clients/UpdateClient'
+import { UpdateClientSection } from '../admin/components/pages/About/Forms/Clients/UpdateClientSection'
 
 export default function AppRouter() {
   const currentUser = AuthService.getCurrentUser()
@@ -88,6 +97,7 @@ export default function AppRouter() {
             component={Home}
             isAuthenticated={!!currentUser}
           />
+
           <PrivateRoute
             exact
             path="/pages/home/edit"
@@ -167,13 +177,77 @@ export default function AppRouter() {
 
           <PrivateRoute
             exact
-            path="/pages/about"
+            path="/pages/nosotros"
             component={About}
             isAuthenticated={!!currentUser}
           />
+
           <PrivateRoute
             exact
-            path="/pages/contact"
+            path="/pages/nosotros/edit"
+            component={EditAbout}
+            isAuthenticated={!!currentUser}
+          />
+
+          <PrivateRoute
+            exact
+            path="/pages/nosotros/edit-card"
+            component={UpdateAboutCard}
+            isAuthenticated={!!currentUser}
+          />
+
+          <PrivateRoute
+            exact
+            path="/pages/nosotros/edit-second-card"
+            component={UpdateAboutSecondCard}
+            isAuthenticated={!!currentUser}
+          />
+
+          <PrivateRoute
+            exact
+            path="/pages/nosotros/equipo"
+            component={TeamMembers}
+            isAuthenticated={!!currentUser}
+          />
+
+          <PrivateRoute
+            exact
+            path="/pages/nosotros/equipo/editar-seccion-:id"
+            component={UpdateTeamSection}
+            isAuthenticated={!!currentUser}
+          />
+
+          <PrivateRoute
+            exact
+            path="/pages/nosotros/equipo/editar-miembro-:id"
+            component={UpdateMember}
+            isAuthenticated={!!currentUser}
+          />
+
+          <PrivateRoute
+            exact
+            path="/pages/nosotros/clientes"
+            component={Clients}
+            isAuthenticated={!!currentUser}
+          />
+
+          <PrivateRoute
+            exact
+            path="/pages/nosotros/clientes/editar-cliente-:id"
+            component={UpdateClient}
+            isAuthenticated={!!currentUser}
+          />
+
+          <PrivateRoute
+            exact
+            path="/pages/nosotros/clientes/editar-seccion-:id"
+            component={UpdateClientSection}
+            isAuthenticated={!!currentUser}
+          />
+
+          <PrivateRoute
+            exact
+            path="/pages/contacto"
             component={Contact}
             isAuthenticated={!!currentUser}
           />

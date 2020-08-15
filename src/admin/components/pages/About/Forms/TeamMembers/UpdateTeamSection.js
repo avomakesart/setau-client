@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from 'react'
+import Swal from 'sweetalert2'
+import { useParams, useHistory } from 'react-router-dom'
 import { useForm } from '../../../../../../hooks/useForm'
 import { fetchData } from '../../../../../../helpers/fetch'
-import Swal from 'sweetalert2'
 import Input from '../../../../../../components/ui/Input/Input'
 import TextArea from '../../../../../../components/ui/TextArea/TextArea'
+import { SectionColumn } from '../../../../ui/Section/Section'
+import Navbar from '../../../../ui/Navbar/Navbar'
+import AboutEditMenu from '../../AboutEditMenu'
+
 import {
   Button,
   DisabledButton,
@@ -12,21 +17,17 @@ import {
   ColumnRow,
   Card,
   CardBody,
-} from '../../Home.styles'
-import { useParams, useHistory } from 'react-router-dom'
-import Navbar from '../../../../ui/Navbar/Navbar'
-import { SectionColumn } from '../../../../ui/Section/Section'
-import EditMenu from '../../EditMenu'
+} from '../../About.styles'
 
-export const UpdateIcons = () => {
+export const UpdateTeamSection = () => {
   const [updateValues, setUpdateValues] = useState([])
   const [formValues, handleChange] = useForm({
-    icon_image: '',
-    icon_title: '',
-    icon_description: '',
+    section_description: '',
+    section_subtitle: '',
+    section_title: '',
   })
 
-  const { icon_image, icon_title, icon_description } = formValues
+  const { section_description, section_subtitle, section_title } = formValues
 
   const { id } = useParams()
   const history = useHistory()
@@ -43,11 +44,11 @@ export const UpdateIcons = () => {
     e.preventDefault()
     try {
       const resp = await fetchData(
-        `icon_values/${id}`,
+        `team_section/${id}`,
         {
-          icon_image,
-          icon_title,
-          icon_description,
+          section_description,
+          section_subtitle,
+          section_title,
         },
         'PUT'
       )
@@ -67,17 +68,17 @@ export const UpdateIcons = () => {
   useEffect(() => {
     const abortController = new AbortController()
     const signal = abortController.signal
-    const getTestimonialInfo = async () => {
+    const getTeamSection = async () => {
       try {
-        const resp = await fetchData(`icon_values/${id}`, { signal: signal })
-        const testimonials = await resp.json()
+        const resp = await fetchData(`team_section/${id}`, { signal: signal })
+        const teamMembers = await resp.json()
 
-        setUpdateValues(testimonials)
+        setUpdateValues(teamMembers)
       } catch (error) {
         console.log(error.message)
       }
     }
-    getTestimonialInfo()
+    getTeamSection()
     return function cleanup() {
       abortController.abort()
     }
@@ -95,44 +96,46 @@ export const UpdateIcons = () => {
                   {updateValues.map((update) => (
                     <div key={update.id}>
                       <Input
-                        id="icon_image"
+                        id="section_title"
                         type="text"
-                        name="icon_image"
-                        value={icon_image}
-                        label="Imagen:"
-                        placeholder={update.icon_image}
+                        name="section_title"
+                        value={section_title}
+                        label="Titulo:"
+                        placeholder={update.section_title}
                         onChange={handleChange}
                       />
+
                       <Input
-                        id="icon_title"
+                        id="section_subtitle"
                         type="text"
-                        name="icon_title"
-                        value={icon_title}
-                        label="Nombre:"
-                        placeholder={update.icon_title}
+                        name="section_subtitle"
+                        value={section_subtitle}
+                        label="Subtitulo:"
+                        placeholder={update.section_subtitle}
                         onChange={handleChange}
                       />
+
                       <TextArea
-                        id="icon_description"
+                        id="section_description"
                         type="textarea"
-                        name="icon_description"
-                        value={icon_description}
+                        name="section_description"
+                        value={section_description}
                         label="Descripción:"
                         rows="5"
-                        placeholder={update.icon_description}
+                        placeholder={update.section_description}
                         onChange={handleChange}
                       />
 
                       {
-                        (icon_image,
-                        icon_title,
-                        icon_description ? (
+                        (section_description,
+                        section_subtitle,
+                        section_title ? (
                           <Button onClick={handleUpdate} type="submit">
-                            Actualizar testimonial
+                            Actualizar Sección
                           </Button>
                         ) : (
                           <DisabledButton disabled>
-                            Actualizar testimonial
+                            Actualizar Sección
                           </DisabledButton>
                         ))
                       }
@@ -149,7 +152,7 @@ export const UpdateIcons = () => {
         </Container>
       </SectionColumn>
       <div>
-        <EditMenu />
+        <AboutEditMenu />
       </div>
     </>
   )

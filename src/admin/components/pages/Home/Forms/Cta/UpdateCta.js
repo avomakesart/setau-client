@@ -5,14 +5,8 @@ import { useForm } from '../../../../../../hooks/useForm'
 import Input from '../../../../../../components/ui/Input/Input'
 import Navbar from '../../../../ui/Navbar/Navbar'
 import { SectionColumn } from '../../../../ui/Section/Section'
-import { Sidebar } from '../../../../../../components/ui/Sidebar/Sidebar'
-import {
-  Card,
-  CardBody,
-  Button,
-  DisabledButton,
-  NavLink,
-} from '../../Home.styles'
+import { Card, CardBody, Button, DisabledButton } from '../../Home.styles'
+import EditMenu from '../../EditMenu'
 
 export const UpdateCta = () => {
   const [updateValues, setUpdateValues] = useState([])
@@ -164,16 +158,7 @@ export const UpdateCta = () => {
         </Card>
       </SectionColumn>
       <div>
-        <Sidebar>
-          <NavLink to="/pages/home/edit-hero">Encabezado</NavLink>
-          <NavLink to="/pages/home/edit-values">Seccion Valores</NavLink>
-          <NavLink to="/pages/home/edit-values-icons">
-            Iconos de valores
-          </NavLink>
-          <NavLink to="/pages/home/edit-card">Primer Tarjeta</NavLink>
-          <NavLink to="/pages/home/edit-second-card">Segunda Tarjeta</NavLink>
-          <NavLink to="/pages/home/testimonials">Testimoniales</NavLink>
-        </Sidebar>
+        <EditMenu />
       </div>
     </>
   )

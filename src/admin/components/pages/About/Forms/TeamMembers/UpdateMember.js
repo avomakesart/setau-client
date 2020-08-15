@@ -1,32 +1,39 @@
 import React, { useEffect, useState } from 'react'
+import Swal from 'sweetalert2'
+import { useParams, useHistory } from 'react-router-dom'
 import { useForm } from '../../../../../../hooks/useForm'
 import { fetchData } from '../../../../../../helpers/fetch'
-import Swal from 'sweetalert2'
 import Input from '../../../../../../components/ui/Input/Input'
 import TextArea from '../../../../../../components/ui/TextArea/TextArea'
-import {
-  Button,
-  DisabledButton,
-  Container,
-  Row,
-  ColumnRow,
-  Card,
-  CardBody,
-} from '../../Home.styles'
-import { useParams, useHistory } from 'react-router-dom'
-import Navbar from '../../../../ui/Navbar/Navbar'
 import { SectionColumn } from '../../../../ui/Section/Section'
-import EditMenu from '../../EditMenu'
+import Navbar from '../../../../ui/Navbar/Navbar'
+import AboutEditMenu from '../../AboutEditMenu'
 
-export const UpdateIcons = () => {
+import {
+    Button,
+    DisabledButton,
+    Container,
+    Row,
+    ColumnRow,
+    Card,
+    CardBody,
+  } from '../../About.styles'
+
+export const UpdateMember = () => {
   const [updateValues, setUpdateValues] = useState([])
   const [formValues, handleChange] = useForm({
-    icon_image: '',
-    icon_title: '',
-    icon_description: '',
+    member_description: '',
+    member_image: '',
+    member_name: '',
+    member_position: '',
   })
 
-  const { icon_image, icon_title, icon_description } = formValues
+  const {
+    member_description,
+    member_image,
+    member_name,
+    member_position,
+  } = formValues
 
   const { id } = useParams()
   const history = useHistory()
@@ -43,11 +50,12 @@ export const UpdateIcons = () => {
     e.preventDefault()
     try {
       const resp = await fetchData(
-        `icon_values/${id}`,
+        `team_member/${id}`,
         {
-          icon_image,
-          icon_title,
-          icon_description,
+          member_description,
+          member_image,
+          member_name,
+          member_position,
         },
         'PUT'
       )
@@ -69,10 +77,10 @@ export const UpdateIcons = () => {
     const signal = abortController.signal
     const getTestimonialInfo = async () => {
       try {
-        const resp = await fetchData(`icon_values/${id}`, { signal: signal })
-        const testimonials = await resp.json()
+        const resp = await fetchData(`team_member/${id}`, { signal: signal })
+        const teamMembers = await resp.json()
 
-        setUpdateValues(testimonials)
+        setUpdateValues(teamMembers)
       } catch (error) {
         console.log(error.message)
       }
@@ -95,38 +103,51 @@ export const UpdateIcons = () => {
                   {updateValues.map((update) => (
                     <div key={update.id}>
                       <Input
-                        id="icon_image"
+                        id="member_name"
                         type="text"
-                        name="icon_image"
-                        value={icon_image}
-                        label="Imagen:"
-                        placeholder={update.icon_image}
-                        onChange={handleChange}
-                      />
-                      <Input
-                        id="icon_title"
-                        type="text"
-                        name="icon_title"
-                        value={icon_title}
+                        name="member_name"
+                        value={member_name}
                         label="Nombre:"
-                        placeholder={update.icon_title}
+                        placeholder={update.member_name}
                         onChange={handleChange}
                       />
+
+                      <Input
+                        id="member_image"
+                        type="text"
+                        name="member_image"
+                        value={member_image}
+                        label="Imagen:"
+                        placeholder={update.member_image}
+                        onChange={handleChange}
+                      />
+
+                      <Input
+                        id="member_position"
+                        type="text"
+                        name="member_position"
+                        value={member_position}
+                        label="Posicion:"
+                        placeholder={update.member_position}
+                        onChange={handleChange}
+                      />
+
                       <TextArea
-                        id="icon_description"
+                        id="member_description"
                         type="textarea"
-                        name="icon_description"
-                        value={icon_description}
+                        name="member_description"
+                        value={member_description}
                         label="Descripción:"
                         rows="5"
-                        placeholder={update.icon_description}
+                        placeholder={update.member_description}
                         onChange={handleChange}
                       />
 
                       {
-                        (icon_image,
-                        icon_title,
-                        icon_description ? (
+                        (member_description,
+                        member_image,
+                        member_name,
+                        member_position ? (
                           <Button onClick={handleUpdate} type="submit">
                             Actualizar testimonial
                           </Button>
@@ -149,7 +170,7 @@ export const UpdateIcons = () => {
         </Container>
       </SectionColumn>
       <div>
-        <EditMenu />
+        <AboutEditMenu />
       </div>
     </>
   )

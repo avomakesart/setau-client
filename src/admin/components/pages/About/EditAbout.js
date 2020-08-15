@@ -1,14 +1,14 @@
 import React from 'react'
 import Navbar from '../../ui/Navbar/Navbar'
 import { SectionColumn } from '../../ui/Section/Section'
-import EditMenu from './EditMenu'
+import AboutEditMenu from './AboutEditMenu'
 
-export default function EditHome() {
+export default function EditAbout() {
   return (
     <>
       <Navbar />
       <SectionColumn>
-        <h4>Pagina de edición / Inicio</h4>
+        <h4>Pagina de edición / Nosotros</h4>
         <p>
           Aqui podras editar las secciones de la pagina de inicio, en lado
           derecho tienes un sidebar con todos los links para edición.
@@ -23,7 +23,7 @@ export default function EditHome() {
       </SectionColumn>
 
       <aside>
-        <EditMenu />
+        <AboutEditMenu />
       </aside>
     </>
   )

@@ -4,32 +4,30 @@ import { fetchData } from '../../../../../../helpers/fetch'
 import { useForm } from '../../../../../../hooks/useForm'
 import Input from '../../../../../../components/ui/Input/Input'
 import TextArea from '../../../../../../components/ui/TextArea/TextArea'
-import {
-  Card,
-  CardBody,
-  Button,
-  DisabledButton,
-} from '../../Home.styles'
-import Navbar from '../../../../ui/Navbar/Navbar'
 import { SectionColumn } from '../../../../ui/Section/Section'
-import EditMenu from '../../EditMenu'
+import Navbar from '../../../../ui/Navbar/Navbar'
+import AboutEditMenu from '../../AboutEditMenu'
 
-export const UpdateThirdCard = () => {
+import { Card, CardBody, Button, DisabledButton } from '../../About.styles'
+
+export const UpdateAboutSecondCard = () => {
   const [updateValues, setUpdateValues] = useState([])
   const [formValues, handleChange] = useForm({
-    homepage_card_title: '',
-    homepage_card_desc: '',
-    homepage_card_button_text: '',
-    homepage_card_button_color: '',
-    homepage_card_img: '',
+    card_title: '',
+    card_desc: '',
+    card_button_text: '',
+    card_button_color: '',
+    card_button_background_color: '',
+    card_img: '',
   })
 
   const {
-    homepage_card_title,
-    homepage_card_desc,
-    homepage_card_button_text,
-    homepage_card_button_color,
-    homepage_card_img,
+    card_title,
+    card_desc,
+    card_button_text,
+    card_button_color,
+    card_button_background_color,
+    card_img,
   } = formValues
 
   const id = updateValues.map((value) => value.id)
@@ -38,19 +36,24 @@ export const UpdateThirdCard = () => {
     e.preventDefault()
     try {
       const resp = await fetchData(
-        `home_third_card/${id}`,
+        `about_second_card/${id}`,
         {
-          homepage_card_title,
-          homepage_card_desc,
-          homepage_card_button_text,
-          homepage_card_button_color,
-          homepage_card_img,
+          card_title,
+          card_desc,
+          card_button_text,
+          card_button_color,
+          card_button_background_color,
+          card_img,
         },
         'PUT'
       )
       const body = await JSON.stringify(resp)
       if (body) {
-        Swal.fire('Correcto', `Se actualizo correctamente`, 'success').then(
+        Swal.fire(
+          'Correct',
+          `Se actualizo la tarjeta correctamente`,
+          'success'
+        ).then(
           setTimeout(() => {
             window.location.reload(true)
           }, 2000)
@@ -67,7 +70,7 @@ export const UpdateThirdCard = () => {
 
     const getCardValues = async () => {
       try {
-        const resp = await fetchData(`home_third_card`, {
+        const resp = await fetchData(`about_second_card`, {
           signal: signal,
         })
         const vals = await resp.json()
@@ -89,56 +92,77 @@ export const UpdateThirdCard = () => {
       <Navbar />
       <SectionColumn>
         <Card>
-          <h4 className="center">Actualizar Tecer Tarjeta</h4>
+          <h4 className="center">Actualizar Segunda Tarjeta</h4>
           {updateValues.map((update) => (
             <CardBody key={update.id}>
               <Input
-                id="third_homepage_card_title"
+                id="card_title"
                 type="text"
-                name="homepage_card_title"
-                value={homepage_card_title}
+                name="card_title"
+                value={card_title}
                 label="Titulo"
-                placeholder={update.homepage_card_title}
+                placeholder={update.card_title}
                 onChange={handleChange}
               />
 
               <TextArea
-                id="third_homepage_card_desc"
+                id="card_desc"
                 type="textarea"
-                name="homepage_card_desc"
-                value={homepage_card_desc}
+                name="card_desc"
+                value={card_desc}
                 label="Descripción:"
                 rows="5"
-                placeholder={update.homepage_card_desc}
+                placeholder={update.card_desc}
                 onChange={handleChange}
               />
 
               <Input
-                id="third_homepage_card_button_text"
+                id="card_button_text"
                 type="text"
-                name="homepage_card_button_text"
-                value={homepage_card_button_text}
+                name="card_button_text"
+                value={card_button_text}
                 label="Texto del boton:"
-                placeholder={update.homepage_card_button_text}
+                placeholder={update.card_button_text}
                 onChange={handleChange}
               />
 
               <Input
-                id="third_homepage_card_button_color"
-                type="text"
-                name="homepage_card_button_color"
-                value={homepage_card_button_color}
+                id="card_button_color"
+                type="color"
+                name="card_button_color"
+                value={card_button_color}
                 label="Color del boton:"
-                placeholder={update.homepage_card_button_color}
+                placeholder={update.card_button_color}
+                onChange={handleChange}
+              />
+
+              <Input
+                id="card_button_background_color"
+                type="color"
+                name="card_button_background_color"
+                value={card_button_background_color}
+                label="Color de fondo del boton:"
+                placeholder={update.card_button_background_color}
+                onChange={handleChange}
+              />
+
+              <Input
+                id="card_img"
+                type="text"
+                name="card_img"
+                value={card_img}
+                label="Imagen:"
+                placeholder={update.card_img}
                 onChange={handleChange}
               />
 
               {
-                (homepage_card_title,
-                homepage_card_desc,
-                homepage_card_button_text,
-                homepage_card_button_color,
-                homepage_card_img ? (
+                (card_title,
+                card_desc,
+                card_button_text,
+                card_button_color,
+                card_button_background_color,
+                card_img ? (
                   <Button onClick={handleUpdate} type="submit">
                     Actulizar Tarjeta
                   </Button>
@@ -151,7 +175,7 @@ export const UpdateThirdCard = () => {
         </Card>
       </SectionColumn>
       <div>
-        <EditMenu />
+        <AboutEditMenu />
       </div>
     </>
   )

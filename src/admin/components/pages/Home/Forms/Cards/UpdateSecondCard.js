@@ -9,11 +9,10 @@ import {
   CardBody,
   Button,
   DisabledButton,
-  NavLink,
 } from '../../Home.styles'
 import Navbar from '../../../../ui/Navbar/Navbar'
 import { SectionColumn } from '../../../../ui/Section/Section'
-import { Sidebar } from '../../../../../../components/ui/Sidebar/Sidebar'
+import EditMenu from '../../EditMenu'
 
 export const UpdateSecondCard = () => {
   const [updateValues, setUpdateValues] = useState([])
@@ -162,16 +161,7 @@ export const UpdateSecondCard = () => {
         </Card>
       </SectionColumn>
       <div>
-        <Sidebar>
-          <NavLink to="/pages/home/edit-hero">Encabezado</NavLink>
-          <NavLink to="/pages/home/edit-values">Seccion Valores</NavLink>
-          <NavLink to="/pages/home/edit-values-icons">
-            Iconos de valores
-          </NavLink>
-          <NavLink to="/pages/home/edit-card">Primer Tarjeta</NavLink>
-          <NavLink to="/pages/home/edit-second-card">Segunda Tarjeta</NavLink>
-          <NavLink to="/pages/home/testimonials">Testimoniales</NavLink>
-        </Sidebar>
+      <EditMenu />
       </div>
     </>
   )

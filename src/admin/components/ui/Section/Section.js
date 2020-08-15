@@ -1,14 +1,14 @@
 import React from 'react'
-import { Section, Container, Row, Column } from '../../pages/Home/Home.styles'
+import { MidSection, Container, Row, Column } from '../../pages/Home/Home.styles'
 
 export const SectionColumn = ({ children }) => {
   return (
-    <Section>
+    <MidSection>
       <Container>
         <Row>
           <Column>{children}</Column>
         </Row>
       </Container>
-    </Section>
+    </MidSection>
   )
 }

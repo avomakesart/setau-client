@@ -61,29 +61,17 @@ const GlobalStyle = createGlobalStyle`
     text-align: center;
   }
 
-  .toggle {
-  height: 50px;
-  border-top-right-radius: 10rem;
-  border-bottom-right-radius: 9rem;
-  width: 10px;
-  position: absolute;
-  outline: none;
-  z-index: 1;
-  background-color: rgba(64, 194, 133, 0.693);
-  border-color: rgba(64, 194, 133, 0.693);
-  border-left: 0;
-  }
+ .left {
+   text-align: left!important;
+ }
 
-  .side-bar {
-  height: 100% !important;
-  display: flex;
-  flex-direction: column;
-  border-right: 1px solid;
-  border-radius: 0;
-  border-color: rgba(64, 194, 133, 0.693);
-  background-color: rgb(255, 255, 255);
-  transition: 0.8s ease;
-}
+ .right {
+   text-align: right;
+ }
+
+ .w-auto {
+   width: auto;
+ }
 `
 
 export default GlobalStyle

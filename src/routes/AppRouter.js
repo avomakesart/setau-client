@@ -30,8 +30,8 @@ import Home from '../admin/components/pages/Home/Home'
 import About from '../admin/components/pages/About/About'
 import Contact from '../admin/components/pages/Contact/Contact'
 import BlogPost from '../admin/components/pages/BlogPost/BlogPost'
-import AddPost from '../admin/components/pages/BlogPost/AddPost'
-import EditPost from '../admin/components/pages/BlogPost/EditPost'
+import { AddPost } from '../admin/components/pages/BlogPost/AddPost'
+import { EditPost } from '../admin/components/pages/BlogPost/EditPost'
 import EditHome from '../admin/components/pages/Home/EditHome'
 import { UpdateTestimonial } from '../admin/components/pages/Home/Forms/Testimonials/UpdateTestimonial'
 import { UpdateHero } from '../admin/components/pages/Home/Forms/Hero/UpdateHero'
@@ -52,6 +52,7 @@ import { UpdateTeamSection } from '../admin/components/pages/About/Forms/TeamMem
 import Clients from '../admin/components/pages/About/Forms/Clients/Clients'
 import { UpdateClient } from '../admin/components/pages/About/Forms/Clients/UpdateClient'
 import { UpdateClientSection } from '../admin/components/pages/About/Forms/Clients/UpdateClientSection'
+import SinglePostAdmin from '../admin/components/pages/BlogPost/SinglePost'
 
 export default function AppRouter() {
   const currentUser = AuthService.getCurrentUser()
@@ -258,6 +259,14 @@ export default function AppRouter() {
             component={BlogPost}
             isAuthenticated={!!currentUser}
           />
+
+<PrivateRoute
+            exact
+            path="/pages/posts/entrada-:id/:slug"
+            component={SinglePostAdmin}
+            isAuthenticated={!!currentUser}
+          />
+
           <PrivateRoute
             exact
             path="/pages/add-post"
@@ -270,6 +279,7 @@ export default function AppRouter() {
             component={EditPost}
             isAuthenticated={!!currentUser}
           />
+
         </Switch>
       </>
       <Footer />

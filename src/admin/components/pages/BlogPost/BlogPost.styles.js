@@ -116,6 +116,7 @@ export const LinkButton = styled(Link)`
   text-transform: uppercase;
   font-size: 0.8125rem;
   min-width: 2.375rem;
+  margin-top: 2rem;
   cursor: pointer;
   text-align: center;
   white-space: nowrap;
@@ -157,6 +158,7 @@ export const DangerButton = styled.button`
   border-color: none;
   display: block;
   width: 100%;
+  margin-top: 3rem;
   text-decoration: none;
   font-weight: 600;
   letter-spacing: 0.03em;
@@ -240,7 +242,7 @@ export const ValuesGrid = styled.div`
     height: auto;
     display: grid;
     grid-gap: 1rem;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(1, 1fr);
   }
 `
 
@@ -250,7 +252,6 @@ export const ServiceBox = styled.div`
 `
 
 export const ValueCard = styled.div`
-  align-items: center;
   display: flex;
   flex-direction: column;
   padding: 1rem;

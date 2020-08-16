@@ -1,21 +1,21 @@
 import React from 'react'
 import moment from 'moment'
-import { Separator } from './SinglePost.styles'
+import { Separator } from '../../../../components/blog/single-post/SinglePost.styles'
 
-export const Comments = ({ comments }) => {
+export const Comments = ({ comments, children }) => {
   return (
     <div>
       <h4>
         {comments.length > 0
           ? `${comments.length} Comentarios`
-          : 'Aun no hay comentarios se el primero en comentar'}
+          : 'Aun no hay realizado comentarios'}
       </h4>
-      <Separator />
       {comments.map((comment) => (
         <div key={comment.id}>
           <h5>{comment.title}</h5>
           <p>{comment.comment}</p>
           <p>{moment(`${comment.publishedat}`).fromNow()}</p>
+          {children}
           <Separator />
         </div>
       ))}

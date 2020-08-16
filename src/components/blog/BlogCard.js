@@ -8,8 +8,7 @@ import {
   BlogImageContainer,
   EntryDate,
   StyledLink,
-  BlogTitle,
-  Separator,
+  BlogTitle
 } from './Blog.styles'
 
 export default function BlogCard() {
@@ -37,9 +36,6 @@ export default function BlogCard() {
   return (
     <>
       {post.map((p) => (
-        <>
-                <Separator />
-        
         <BlogImageContainer key={p.id}>
           <StyledLink to={`/blog/${p.id}/${p.slug}`}>
             <BlogImage url={p.featured_image} alt="Avatar" />
@@ -52,7 +48,6 @@ export default function BlogCard() {
           </EntryDate>
           <p>{p.summary}</p>
         </BlogImageContainer>
-        </>
       ))}
     </>
   )

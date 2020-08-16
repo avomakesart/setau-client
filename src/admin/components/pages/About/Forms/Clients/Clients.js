@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react'
+import Swal from 'sweetalert2'
 import { fetchData } from '../../../../../../helpers/fetch'
+import { ModalComponent } from '../../../../../../components/ui/Modal/ModalComponent'
 import Navbar from '../../../../ui/Navbar/Navbar'
 import AboutEditMenu from '../../AboutEditMenu'
-import Swal from 'sweetalert2'
-import { ModalComponent } from '../../../../../../components/ui/Modal/ModalComponent'
-
-import { AvatarContainer, AvatarImage } from '../TeamMembers/TeamMembers.styles'
 import { AddClient } from './AddMember'
 
 import {
@@ -25,6 +23,9 @@ import {
   DangerButton,
   Column,
   MidSection,
+  ValuesGrid,
+  ValueCard,
+  IconImage,
 } from '../../About.styles'
 
 const modalbuttonStyles = {
@@ -156,23 +157,24 @@ export default function Clients() {
               {clients.map((c) => (
                 <Card key={c.id}>
                   <CardBody style={{ margin: 0 }}>
-                    <AvatarContainer>
-                      <AvatarImage src={c.client_image} alt="Client" />
-                    </AvatarContainer>
-
-                    <ButtonContainer>
-                      <LinkButton
-                        to={`/pages/nosotros/clientes/editar-cliente-${c.id}`}
-                      >
-                        Editar Cliente
-                      </LinkButton>
-                      <DangerButton
-                        type="button"
-                        onClick={() => handleDelete(c.id)}
-                      >
-                        Eliminar Cliente
-                      </DangerButton>
-                    </ButtonContainer>
+                    <ValuesGrid>
+                      <ValueCard>
+                        <IconImage src={c.client_image} alt="Client Icon" />
+                      </ValueCard>
+                      <ButtonContainer>
+                        <LinkButton
+                          to={`/pages/nosotros/clientes/editar-cliente-${c.id}`}
+                        >
+                          Editar Cliente
+                        </LinkButton>
+                        <DangerButton
+                          type="button"
+                          onClick={() => handleDelete(c.id)}
+                        >
+                          Eliminar Cliente
+                        </DangerButton>
+                      </ButtonContainer>
+                    </ValuesGrid>
                   </CardBody>
                 </Card>
               ))}

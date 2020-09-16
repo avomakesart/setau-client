@@ -7,8 +7,8 @@ export default function Cta() {
   const [homeCta, setHomeCta] = useState([])
 
   useEffect(() => {
-    const abortController = new AbortController();
-    const signal = abortController.signal;
+    const abortController = new AbortController()
+    const signal = abortController.signal
     const getHomepageCta = async () => {
       try {
         const resp = await fetchData('homepage_cta', { signal: signal })
@@ -21,8 +21,8 @@ export default function Cta() {
     }
     getHomepageCta()
     return function cleanup() {
-      abortController.abort();
-    };
+      abortController.abort()
+    }
   }, [])
 
   return (
@@ -34,7 +34,13 @@ export default function Cta() {
             <h4>{cta.cta_subtitle}</h4>
           </div>
           <div>
-            <Button style={{ color:  cta.cta_button_color, backgroundColor: cta.cta_button_background_color }} >
+            <Button
+              onClick={() => (window.location.href = '/contacto')}
+              style={{
+                color: cta.cta_button_color,
+                backgroundColor: cta.cta_button_background_color,
+              }}
+            >
               {cta.cta_button_text}
             </Button>
           </div>

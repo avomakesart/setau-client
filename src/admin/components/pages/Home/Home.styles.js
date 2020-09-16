@@ -104,6 +104,13 @@ export const ButtonContainer = styled.div`
   justify-content: center;
 `
 
+export const RowButtonContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-evenly;
+`
+
 export const LinkButton = styled(Link)`
   color: #fff;
   background-color: #467fcf;
@@ -156,14 +163,13 @@ export const DangerButton = styled.button`
   background-color: crimson;
   border-color: none;
   display: block;
-  width: 100%;
+  width: auto;
   text-decoration: none;
   font-weight: 600;
   letter-spacing: 0.03em;
   font-size: 0.8125rem;
   min-width: 2.375rem;
   cursor: pointer;
-  margin-top: 1rem;
   text-align: center;
   white-space: nowrap;
   user-select: none;
@@ -180,7 +186,7 @@ export const DisabledButton = styled.button`
   background-color: gray;
   border-color: none;
   display: block;
-  width: auto;
+  width: 100%;
   text-decoration: none;
   font-weight: 600;
   letter-spacing: 0.03em;
@@ -215,19 +221,15 @@ export const StyledLink = styled(Link)`
 `
 
 export const NavLink = styled(Link)`
-  color: #6d6d6d;
-  font-size: 14px;
-  font-weight: 700;
-  line-height: 3;
-  text-transform: uppercase;
-  text-align: start;
-  letter-spacing: 0.08em;
+  padding: 8px 8px 8px 32px;
   text-decoration: none;
+  font-size: 25px;
+  color: #818181 !important;
+  display: block;
+  transition: 0.3s;
 
-  @media (min-width: 600px) {
-    color: #1a1a1a;
-    padding-right: 7px;
-    padding-left: 7px;
+  :hover {
+    color: #f1f1f1;
   }
 `
 
@@ -261,4 +263,49 @@ export const ValueCard = styled.div`
 export const IconImage = styled.img`
   width: 6rem;
   max-width: 100%;
+`
+
+export const InputColorWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 1rem 0 4rem;
+`
+
+export const InputColorContainer = styled.div`
+  position: relative;
+  overflow: hidden;
+  width: 40px;
+  height: 40px;
+  border: solid 2px #ddd;
+  border-radius: 40px;
+`
+
+export const InputColor = styled.input`
+  position: absolute;
+  right: -8px;
+  top: -8px;
+  width: 56px;
+  height: 56px;
+  border: none;
+`
+
+export const Toggle = styled.button`
+  cursor: pointer;
+  color: black;
+  font-size: 20px;
+  margin-left: 20px;
+  background: transparent;
+  border: none;
+  z-index: 101;
+`
+
+export const ToggleText = styled.p`
+  cursor: pointer;
+  color: black;
+  font-size: 16px;
+  background: transparent;
+  border: none;
+  z-index: 101;
+  margin-right: 1rem;
 `

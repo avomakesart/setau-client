@@ -128,3 +128,21 @@ export const StyledLink = styled(Link)`
   color: #000;
   margin-top: 1rem;
 `
+
+export const PrivateContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  max-width: 900px;
+  margin: 15rem auto;
+  text-align: center;
+`
+
+export const PrivateButton = styled(Link)`
+  background-color: #191919;
+  color: #ffffff !important;
+  text-decoration: none;
+  border-radius: 10px;
+  padding: 1rem;
+  margin: 0 auto;
+  font-size: 1.2rem;
+`

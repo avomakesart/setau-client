@@ -1,33 +1,39 @@
 import React, { useEffect, useState } from 'react'
+import { useParams, useHistory } from 'react-router-dom'
+import Swal from 'sweetalert2'
 import { useForm } from '../../../../../../hooks/useForm'
 import { fetchData } from '../../../../../../helpers/fetch'
-import Swal from 'sweetalert2'
-import Input from '../../../../../../components/ui/Input/Input'
-import TextArea from '../../../../../../components/ui/TextArea/TextArea'
+import Navbar from '../../../../ui/Navbar/Navbar'
+import EditMenu from '../../EditMenu'
+import Input from '../../../../ui/Input/Input'
+import TextArea from '../../../../ui/TextArea/TextArea'
+import authService from '../../../../../../services/auth-service'
+import { PrivateMessage } from '../../../../hoc/PrivateMessage'
+
+import { InputContainer } from '../../../../ui/Input/Input.styles'
+import { Button, DisabledButton, Toggle, ToggleText } from '../../Home.styles'
+
 import {
-  Button,
-  DisabledButton,
+  FullSection,
   Container,
   Row,
-  ColumnRow,
-  Card,
-  CardBody,
-  NavLink,
-} from '../../Home.styles'
-import { useParams, useHistory } from 'react-router-dom'
-import Navbar from '../../../../ui/Navbar/Navbar'
-import { SectionColumn } from '../../../../ui/Section/Section'
-import { Sidebar } from '../../../../../../components/ui/Sidebar/Sidebar'
+  Column,
+  AddFormBody,
+} from '../../../BlogPost/BlogPost.styles'
 
 export const UpdateTestimonial = () => {
   const [updateValue, setUpdateValue] = useState([])
+  const [openMenu, setOpenMenu] = useState(false)
+  const [testimonials_img, setImage] = useState('')
+  const [, setLoading] = useState(false)
+  const [showAdminBoard, setShowAdminBoard] = useState(false)
+  const [, setCurrentUser] = useState(undefined)
   const [formValues, handleChange] = useForm({
     testimonials_desc: '',
-    testimonials_img: '',
     testimonials_name: '',
   })
 
-  const { testimonials_desc, testimonials_img, testimonials_name } = formValues
+  const { testimonials_desc, testimonials_name } = formValues
 
   const { id } = useParams()
   const history = useHistory()
@@ -84,84 +90,143 @@ export const UpdateTestimonial = () => {
     }
   }, [id])
 
-  console.log(id)
+  const toggleMenu = () => {
+    return setOpenMenu(!openMenu)
+  }
+
+  const uploadImage = async (e) => {
+    const files = e.target.files
+    const data = new FormData()
+    data.append('file', files[0])
+    data.append('upload_preset', 'setau_assets')
+    setLoading(true)
+    const res = await fetch(
+      'https://api.cloudinary.com/v1_1/bluecatencode/upload',
+      {
+        method: 'POST',
+        body: data,
+      }
+    )
+    const file = await res.json()
+
+    setImage(file.secure_url)
+    console.log(file.secure_url)
+    setLoading(false)
+  }
+
+  useEffect(() => {
+    const user = authService.getCurrentUser()
+
+    if (user) {
+      setCurrentUser(user)
+      setShowAdminBoard(user.roles.includes('ROLE_ADMIN'))
+    }
+  }, [])
 
   return (
     <>
-      <Navbar />
-      <SectionColumn>
-        <Container>
-          <Row>
-            <ColumnRow>
-              <Card>
-                <CardBody>
-                  {updateValue.map((update) => (
-                    <div key={update.id}>
-                      <TextArea
-                        id="testimonials_desc"
-                        type="textarea"
-                        name="testimonials_desc"
-                        value={testimonials_desc}
-                        label="Descripción:"
-                        rows="5"
-                        placeholder={update.testimonials_desc}
-                        onChange={handleChange}
-                      />
-                      <Input
-                        id="testimonials_img"
-                        type="text"
-                        name="testimonials_img"
-                        value={testimonials_img}
-                        label="Imagen:"
-                        placeholder={update.testimonials_img}
-                        onChange={handleChange}
-                      />
-                      <Input
-                        id="testimonials_name"
-                        type="text"
-                        name="testimonials_name"
-                        value={testimonials_name}
-                        label="Nombre:"
-                        placeholder={update.testimonials_name}
-                        onChange={handleChange}
-                      />
-                      {
-                        (testimonials_desc,
-                        testimonials_img,
-                        testimonials_name ? (
-                          <Button onClick={handleUpdate} type="submit">
-                            Actualizar testimonial
-                          </Button>
-                        ) : (
-                          <DisabledButton disabled>
-                            Actualizar testimonial
-                          </DisabledButton>
-                        ))
-                      }
-                      <br />
-                      <Button onClick={handleReturn} typs="button">
-                        Regresar
-                      </Button>
+      {showAdminBoard ? (
+        <>
+          <Navbar />
+          <FullSection>
+            <Container>
+              <Row>
+                <Column>
+                  <AddFormBody>
+                    <div
+                      style={{ display: 'flex', justifyContent: 'flex-end' }}
+                    >
+                      {!openMenu ? (
+                        <>
+                          <Toggle id="toggle" onClick={toggleMenu}>
+                            &#8801;
+                          </Toggle>
+                          <ToggleText onClick={toggleMenu}>Menu</ToggleText>
+                        </>
+                      ) : (
+                        <>
+                          <Toggle id="toggle" onClick={toggleMenu}>
+                            x
+                          </Toggle>
+                          <ToggleText onClick={toggleMenu}>Cerrar</ToggleText>
+                        </>
+                      )}
+
+                      {openMenu && <EditMenu />}
                     </div>
-                  ))}
-                </CardBody>
-              </Card>
-            </ColumnRow>
-          </Row>
-        </Container>
-      </SectionColumn>
-      <div>
-        <Sidebar>
-          <NavLink to="/pages/home/edit-hero">Encabezado</NavLink>
-          <NavLink to="/pages/home/edit-values">Seccion Valores</NavLink>
-          <NavLink to="/pages/home/edit-values-icons">
-            Iconos de valores
-          </NavLink>
-          <NavLink to="/pages/home/edit-card">Primer Tarjeta</NavLink>
-          <NavLink to="/pages/home/edit-second-card">Segunda Tarjeta</NavLink>
-          <NavLink to="/pages/home/testimonials">Testimoniales</NavLink>
-        </Sidebar>
-      </div>
+                    {updateValue.map((update) => (
+                      <div key={update.id}>
+                        <InputContainer>
+                          <TextArea
+                            id="testimonials_desc"
+                            type="textarea"
+                            name="testimonials_desc"
+                            value={testimonials_desc}
+                            label="Descripción:"
+                            rows="5"
+                            placeholder={update.testimonials_desc}
+                            onChange={handleChange}
+                          />
+
+                          <Input
+                            type="file"
+                            name="file"
+                            label="Imagen"
+                            placeholder="Upload an image"
+                            onChange={uploadImage}
+                          />
+
+                          <Input
+                            id="testimonials_img"
+                            type="text"
+                            name="testimonials_img"
+                            value={testimonials_img}
+                            placeholder={update.testimonials_img}
+                            onChange={handleChange}
+                            style={{ display: 'none' }}
+                          />
+
+                          <Input
+                            id="testimonials_name"
+                            type="text"
+                            name="testimonials_name"
+                            value={testimonials_name}
+                            label="Nombre:"
+                            placeholder={update.testimonials_name}
+                            onChange={handleChange}
+                          />
+                        </InputContainer>
+                        {
+                          (testimonials_desc,
+                          testimonials_img,
+                          testimonials_name ? (
+                            <>
+                              <Button onClick={handleUpdate} type="submit">
+                                Actualizar testimonial
+                              </Button>
+                              <br />
+                            </>
+                          ) : (
+                            <DisabledButton disabled>
+                              Actualizar testimonial
+                            </DisabledButton>
+                          ))
+                        }
+                        <br />
+                        <Button onClick={handleReturn} typs="button">
+                          Regresar
+                        </Button>
+                      </div>
+                    ))}
+                  </AddFormBody>
+                </Column>
+              </Row>
+            </Container>
+          </FullSection>
+        </>
+      ) : (
+        <PrivateMessage />
+      )}
     </>
   )
 }

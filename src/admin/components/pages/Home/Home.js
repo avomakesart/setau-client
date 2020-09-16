@@ -1,5 +1,8 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Navbar from '../../ui/Navbar/Navbar'
+import authService from '../../../../services/auth-service'
+import { PrivateMessage } from '../../hoc/PrivateMessage'
+
 import {
   Section,
   Container,
@@ -12,8 +15,22 @@ import {
 } from './Home.styles'
 
 export default function Home() {
+  const [showAdminBoard, setShowAdminBoard] = useState(false)
+  const [, setCurrentUser] = useState(undefined)
+
+  useEffect(() => {
+    const user = authService.getCurrentUser()
+
+    if (user) {
+      setCurrentUser(user)
+      setShowAdminBoard(user.roles.includes('ROLE_ADMIN'))
+    }
+  }, [])
+
   return (
     <>
+      {showAdminBoard ? (
+        <>
       <Navbar />
       <Section>
         <Container>
@@ -35,5 +52,9 @@ export default function Home() {
         </Container>
       </Section>
     </>
+     ) : (
+      <PrivateMessage />
+    )}
+  </>
   )
 }

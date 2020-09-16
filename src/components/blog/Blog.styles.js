@@ -73,12 +73,12 @@ export const EntryDate = styled.h5`
 `
 
 export const StyledLink = styled(Link)`
-text-decoration: none;
-color: black;
+  text-decoration: none;
+  color: black;
 
-:hover {
-  text-decoration: underline;
-}
+  :hover {
+    text-decoration: underline;
+  }
 `
 
 export const BlogTitle = styled.h3`
@@ -121,5 +121,7 @@ export const Separator = styled.hr`
   width: 100%;
   color: black;
   height: auto;
-@media (min-width: 1000px) { display: none;} 
+  @media (min-width: 1000px) {
+    display: none;
+  }
 `

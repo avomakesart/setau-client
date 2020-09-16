@@ -26,7 +26,7 @@ export const HeroOverlay = styled.div`
 export const HeroContainer = styled.div`
   display: flex;
   margin: 0 auto;
-  height: 37rem;
+  height: 38rem;
   position: relative;
   max-width: 800px;
 `

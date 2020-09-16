@@ -2,25 +2,44 @@ import React, { useState, useEffect } from 'react'
 import Swal from 'sweetalert2'
 import { fetchData } from '../../../../../../helpers/fetch'
 import { useForm } from '../../../../../../hooks/useForm'
-import Input from '../../../../../../components/ui/Input/Input'
-import TextArea from '../../../../../../components/ui/TextArea/TextArea'
+import Input from '../../../../ui/Input/Input'
+import TitleInput from '../../../../ui/Input/TitleInput'
+import { InputContainer, Label } from '../../../../ui/Input/Input.styles'
+import TextArea from '../../../../ui/TextArea/TextArea'
+import Navbar from '../../../../ui/Navbar/Navbar'
+import EditMenu from '../../EditMenu'
+import authService from '../../../../../../services/auth-service'
+import { PrivateMessage } from '../../../../hoc/PrivateMessage'
+
 import {
-  Card,
-  CardBody,
   Button,
   DisabledButton,
+  InputColorContainer,
+  InputColor,
+  Toggle,
+  ToggleText,
+  InputColorWrapper,
 } from '../../Home.styles'
-import Navbar from '../../../../ui/Navbar/Navbar'
-import { SectionColumn } from '../../../../ui/Section/Section'
-import EditMenu from '../../EditMenu'
+
+import {
+  FullSection,
+  Container,
+  Row,
+  Column,
+  AddFormBody,
+} from '../../../BlogPost/BlogPost.styles'
 
 export const UpdateThirdCard = () => {
   const [updateValues, setUpdateValues] = useState([])
+  const [openMenu, setOpenMenu] = useState(false)
+  const [showAdminBoard, setShowAdminBoard] = useState(false)
+  const [, setCurrentUser] = useState(undefined)
   const [formValues, handleChange] = useForm({
     homepage_card_title: '',
     homepage_card_desc: '',
     homepage_card_button_text: '',
-    homepage_card_button_color: '',
+    homepage_card_button_color: '#ffffff',
+    homepage_card_button_background_color: '#191919',
     homepage_card_img: '',
   })
 
@@ -29,6 +48,7 @@ export const UpdateThirdCard = () => {
     homepage_card_desc,
     homepage_card_button_text,
     homepage_card_button_color,
+    homepage_card_button_background_color,
     homepage_card_img,
   } = formValues
 
@@ -44,6 +64,7 @@ export const UpdateThirdCard = () => {
           homepage_card_desc,
           homepage_card_button_text,
           homepage_card_button_color,
+          homepage_card_button_background_color,
           homepage_card_img,
         },
         'PUT'
@@ -84,75 +105,145 @@ export const UpdateThirdCard = () => {
     }
   }, [])
 
+  const toggleMenu = () => {
+    return setOpenMenu(!openMenu)
+  }
+
+  useEffect(() => {
+    const user = authService.getCurrentUser()
+
+    if (user) {
+      setCurrentUser(user)
+      setShowAdminBoard(user.roles.includes('ROLE_ADMIN'))
+    }
+  }, [])
+
   return (
     <>
-      <Navbar />
-      <SectionColumn>
-        <Card>
-          <h4 className="center">Actualizar Tecer Tarjeta</h4>
-          {updateValues.map((update) => (
-            <CardBody key={update.id}>
-              <Input
-                id="third_homepage_card_title"
-                type="text"
-                name="homepage_card_title"
-                value={homepage_card_title}
-                label="Titulo"
-                placeholder={update.homepage_card_title}
-                onChange={handleChange}
-              />
+      {showAdminBoard ? (
+        <>
+          <Navbar />
+          <FullSection>
+            <Container>
+              <Row>
+                <Column>
+                  <AddFormBody>
+                    <div
+                      style={{ display: 'flex', justifyContent: 'flex-end' }}
+                    >
+                      {!openMenu ? (
+                        <>
+                          <Toggle id="toggle" onClick={toggleMenu}>
+                            &#8801;
+                          </Toggle>
+                          <ToggleText onClick={toggleMenu}>Menu</ToggleText>
+                        </>
+                      ) : (
+                        <>
+                          <Toggle id="toggle" onClick={toggleMenu}>
+                            x
+                          </Toggle>
+                          <ToggleText onClick={toggleMenu}>Cerrar</ToggleText>
+                        </>
+                      )}
 
-              <TextArea
-                id="third_homepage_card_desc"
-                type="textarea"
-                name="homepage_card_desc"
-                value={homepage_card_desc}
-                label="Descripción:"
-                rows="5"
-                placeholder={update.homepage_card_desc}
-                onChange={handleChange}
-              />
+                      {openMenu && <EditMenu />}
+                    </div>
+                    <h4 className="center">Actualizar Tecer Tarjeta</h4>
+                    {updateValues.map((update) => (
+                      <div key={update.id}>
+                        <InputContainer>
+                          <TitleInput
+                            id="third_homepage_card_title"
+                            type="text"
+                            name="homepage_card_title"
+                            value={homepage_card_title}
+                            label="Titulo"
+                            placeholder={update.homepage_card_title}
+                            onChange={handleChange}
+                          />
 
-              <Input
-                id="third_homepage_card_button_text"
-                type="text"
-                name="homepage_card_button_text"
-                value={homepage_card_button_text}
-                label="Texto del boton:"
-                placeholder={update.homepage_card_button_text}
-                onChange={handleChange}
-              />
+                          <TextArea
+                            id="third_homepage_card_desc"
+                            type="textarea"
+                            name="homepage_card_desc"
+                            value={homepage_card_desc}
+                            label="Descripción:"
+                            rows="5"
+                            placeholder={update.homepage_card_desc}
+                            onChange={handleChange}
+                          />
 
-              <Input
-                id="third_homepage_card_button_color"
-                type="text"
-                name="homepage_card_button_color"
-                value={homepage_card_button_color}
-                label="Color del boton:"
-                placeholder={update.homepage_card_button_color}
-                onChange={handleChange}
-              />
+                          <Input
+                            id="third_homepage_card_button_text"
+                            type="text"
+                            name="homepage_card_button_text"
+                            value={homepage_card_button_text}
+                            label="Texto del boton:"
+                            placeholder={update.homepage_card_button_text}
+                            onChange={handleChange}
+                          />
 
-              {
-                (homepage_card_title,
-                homepage_card_desc,
-                homepage_card_button_text,
-                homepage_card_button_color,
-                homepage_card_img ? (
-                  <Button onClick={handleUpdate} type="submit">
-                    Actulizar Tarjeta
-                  </Button>
-                ) : (
-                  <DisabledButton disabled>Actulizar Tarjeta</DisabledButton>
-                ))
-              }
-            </CardBody>
-          ))}
-        </Card>
-      </SectionColumn>
-      <div>
-        <EditMenu />
-      </div>
+                          <InputColorWrapper>
+                            <InputContainer>
+                              <Label>Color de texto del botón</Label>
+                              <InputColorContainer>
+                                <InputColor
+                                  id="third_homepage_card_button_color"
+                                  type="color"
+                                  name="homepage_card_button_color"
+                                  value={homepage_card_button_color}
+                                  placeholder={
+                                    update.homepage_card_button_color
+                                  }
+                                  onChange={handleChange}
+                                />
+                              </InputColorContainer>
+                            </InputContainer>
+
+                            <InputContainer>
+                              <Label>Color de fondo del botón</Label>
+                              <InputColorContainer>
+                                <InputColor
+                                  id="third_homepage_card_button_background_color"
+                                  type="color"
+                                  name="homepage_card_button_background_color"
+                                  value={homepage_card_button_background_color}
+                                  placeholder={
+                                    update.homepage_card_button_background_color
+                                  }
+                                  onChange={handleChange}
+                                />
+                              </InputColorContainer>
+                            </InputContainer>
+                          </InputColorWrapper>
+                        </InputContainer>
+                        {
+                          (homepage_card_title,
+                          homepage_card_desc,
+                          homepage_card_button_text,
+                          homepage_card_button_color,
+                          homepage_card_img ? (
+                            <Button onClick={handleUpdate} type="submit">
+                              Actulizar Tarjeta
+                            </Button>
+                          ) : (
+                            <DisabledButton disabled>
+                              Actulizar Tarjeta
+                            </DisabledButton>
+                          ))
+                        }
+                      </div>
+                    ))}
+                  </AddFormBody>
+                </Column>
+              </Row>
+            </Container>
+          </FullSection>
+        </>
+      ) : (
+        <PrivateMessage />
+      )}
     </>
   )
 }

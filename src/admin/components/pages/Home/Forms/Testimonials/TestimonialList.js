@@ -15,7 +15,7 @@ import {
   LinkButton,
   DangerButton,
   Card,
-  ButtonContainer,
+  RowButtonContainer,
 } from '../../Home.styles'
 
 export const TestimonialList = () => {
@@ -86,14 +86,15 @@ export const TestimonialList = () => {
                 </AvatarContainer>
                 <TestimonialName>{t.testimonials_name}</TestimonialName>
               </NameContainer>
-              <ButtonContainer>
+              <br />
+              <RowButtonContainer>
                 <LinkButton to={`/pages/home/edit-testimonial/${t.id}`}>
                   Actualizar Testimonial
                 </LinkButton>
                 <DangerButton type="button" onClick={() => handleDelete(t.id)}>
                   Eliminar Testimonial
                 </DangerButton>
-              </ButtonContainer>
+              </RowButtonContainer>
             </TestimonialContainer>
           </CardBody>
         </Card>

@@ -35,6 +35,14 @@ export const Container = styled.div`
   }
 `
 
+export const HeroTitle = styled.h2`
+  font-size: 36px;
+
+  @media (min-width: 1000px) {
+    font-size: 61px;
+  }
+`
+
 export const Row = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -45,9 +53,12 @@ export const Row = styled.div`
 export const Column = styled.div`
   flex-basis: 0;
   flex-grow: 1;
-  margin-right: auto !important;
-  margin-left: auto !important;
-  max-width: 24rem;
+  margin: 0 auto;
+  max-width: 100%;
+
+  @media (min-width: 1000px) {
+    max-width: 24rem;
+  }
 `
 
 export const LogoContainer = styled.div`
@@ -80,6 +91,10 @@ export const CardBody = styled.div`
   padding: 2rem !important;
   position: relative;
   width: 100%;
+
+  @media (min-width: 1000px) {
+    padding: 1.3rem !important;
+  }
 `
 
 export const CardTitle = styled.div`

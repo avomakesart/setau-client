@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { fetchData } from '../../../../helpers/fetch'
 import Navbar from '../Navbar/Navbar'
+import authService from '../../../../services/auth-service'
+import { PrivateMessage } from '../../hoc/PrivateMessage'
+
 import {
   Section,
   Container,
@@ -15,6 +18,8 @@ import {
 export default function AdminRoot() {
   const [userInfo, setUserInfo] = useState([])
   const [contactMessage, setContactMessage] = useState([])
+  const [showAdminBoard, setShowAdminBoard] = useState(false)
+  const [, setCurrentUser] = useState(undefined)
 
   useEffect(() => {
     const abortController = new AbortController()
@@ -54,35 +59,49 @@ export default function AdminRoot() {
     }
   }, [])
 
-  
+  useEffect(() => {
+    const user = authService.getCurrentUser()
+
+    if (user) {
+      setCurrentUser(user)
+      setShowAdminBoard(user.roles.includes('ROLE_ADMIN'))
+    }
+  }, [])
+
   return (
     <>
-      <Navbar />
-      <Section>
-        <Container>
-          <Row>
-            <ColumnRow>
-              <Card>
-                <CardBody>
-                  <MessageContainer>
-                    <CardTitle>Usuarios Registrados</CardTitle>
-                    <h2>{userInfo.length}</h2>
-                  </MessageContainer>
-                </CardBody>
-              </Card>
+      {showAdminBoard ? (
+        <>
+          <Navbar />
+          <Section>
+            <Container>
+              <Row>
+                <ColumnRow>
+                  <Card>
+                    <CardBody>
+                      <MessageContainer>
+                        <CardTitle>Usuarios Registrados</CardTitle>
+                        <h2>{userInfo.length}</h2>
+                      </MessageContainer>
+                    </CardBody>
+                  </Card>
 
-              <Card>
-                <CardBody>
-                  <MessageContainer>
-                    <CardTitle>Mensajes Recibidos</CardTitle>
-                    <h2>{contactMessage.length}</h2>
-                  </MessageContainer>
-                </CardBody>
-              </Card>
-            </ColumnRow>
-          </Row>
-        </Container>
-      </Section>
+                  <Card>
+                    <CardBody>
+                      <MessageContainer>
+                        <CardTitle>Mensajes Recibidos</CardTitle>
+                        <h2>{contactMessage.length}</h2>
+                      </MessageContainer>
+                    </CardBody>
+                  </Card>
+                </ColumnRow>
+              </Row>
+            </Container>
+          </Section>
+        </>
+      ) : (
+        <PrivateMessage />
+      )}
     </>
   )
 }

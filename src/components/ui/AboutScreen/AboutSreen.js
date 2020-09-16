@@ -141,6 +141,7 @@ export default function About() {
                     color: card.card_button_color,
                     backgroundColor: card.card_button_background_color,
                   }}
+                  onClick={() => (window.location.href = '/contacto')}
                   primary
                 >
                   {card.card_button_text}
@@ -148,7 +149,7 @@ export default function About() {
               </CardContentContainer>
             </FullColumn>
             <FullColumn>
-              <Link to="/nosotros">
+              <Link to="/contacto">
                 <ProjectImage url={card.card_img} alt={card.card_title} />
               </Link>
             </FullColumn>
@@ -173,7 +174,7 @@ export default function About() {
           {aboutSecondCard.map((card) => (
             <FullColumnsContainer key={card.id}>
               <FullColumn>
-                <Link to="/nosotros">
+                <Link to="/contacto">
                   <ProjectImage url={card.card_img} alt={card.card_title} />
                 </Link>
               </FullColumn>
@@ -186,6 +187,7 @@ export default function About() {
                       color: card.card_button_color,
                       backgroundColor: card.card_button_background_color,
                     }}
+                    onClick={() => (window.location.href = '/contacto')}
                     primary
                   >
                     {card.card_button_text}

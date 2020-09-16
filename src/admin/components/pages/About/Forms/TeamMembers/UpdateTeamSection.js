@@ -3,24 +3,30 @@ import Swal from 'sweetalert2'
 import { useParams, useHistory } from 'react-router-dom'
 import { useForm } from '../../../../../../hooks/useForm'
 import { fetchData } from '../../../../../../helpers/fetch'
-import Input from '../../../../../../components/ui/Input/Input'
-import TextArea from '../../../../../../components/ui/TextArea/TextArea'
-import { SectionColumn } from '../../../../ui/Section/Section'
 import Navbar from '../../../../ui/Navbar/Navbar'
+import Input from '../../../../ui/Input/Input'
+import TitleInput from '../../../../ui/Input/TitleInput'
+import { InputContainer } from '../../../../ui/Input/Input.styles'
+import TextArea from '../../../../ui/TextArea/TextArea'
 import AboutEditMenu from '../../AboutEditMenu'
+import authService from '../../../../../../services/auth-service'
+import { PrivateMessage } from '../../../../hoc/PrivateMessage'
+
+import { Button, DisabledButton, Toggle, ToggleText } from '../../About.styles'
 
 import {
-  Button,
-  DisabledButton,
+  FullSection,
   Container,
   Row,
-  ColumnRow,
-  Card,
-  CardBody,
-} from '../../About.styles'
+  Column,
+  AddFormBody,
+} from '../../../BlogPost/BlogPost.styles'
 
 export const UpdateTeamSection = () => {
   const [updateValues, setUpdateValues] = useState([])
+  const [openMenu, setOpenMenu] = useState(false)
+  const [showAdminBoard, setShowAdminBoard] = useState(false)
+  const [, setCurrentUser] = useState(undefined)
   const [formValues, handleChange] = useForm({
     section_description: '',
     section_subtitle: '',
@@ -84,76 +90,112 @@ export const UpdateTeamSection = () => {
     }
   }, [id])
 
+  useEffect(() => {
+    const user = authService.getCurrentUser()
+
+    if (user) {
+      setCurrentUser(user)
+      setShowAdminBoard(user.roles.includes('ROLE_ADMIN'))
+    }
+  }, [])
+
+  const toggleMenu = () => {
+    return setOpenMenu(!openMenu)
+  }
+
   return (
     <>
-      <Navbar />
-      <SectionColumn>
-        <Container>
-          <Row>
-            <ColumnRow>
-              <Card>
-                <CardBody>
-                  {updateValues.map((update) => (
-                    <div key={update.id}>
-                      <Input
-                        id="section_title"
-                        type="text"
-                        name="section_title"
-                        value={section_title}
-                        label="Titulo:"
-                        placeholder={update.section_title}
-                        onChange={handleChange}
-                      />
+      {showAdminBoard ? (
+        <>
+          <Navbar />
+          <FullSection>
+            <Container>
+              <Row>
+                <Column>
+                  <AddFormBody>
+                    <div
+                      style={{ display: 'flex', justifyContent: 'flex-end' }}
+                    >
+                      {!openMenu ? (
+                        <>
+                          <Toggle id="toggle" onClick={toggleMenu}>
+                            &#8801;
+                          </Toggle>
+                          <ToggleText onClick={toggleMenu}>Menu</ToggleText>
+                        </>
+                      ) : (
+                        <>
+                          <Toggle id="toggle" onClick={toggleMenu}>
+                            x
+                          </Toggle>
+                          <ToggleText onClick={toggleMenu}>Cerrar</ToggleText>
+                        </>
+                      )}
 
-                      <Input
-                        id="section_subtitle"
-                        type="text"
-                        name="section_subtitle"
-                        value={section_subtitle}
-                        label="Subtitulo:"
-                        placeholder={update.section_subtitle}
-                        onChange={handleChange}
-                      />
-
-                      <TextArea
-                        id="section_description"
-                        type="textarea"
-                        name="section_description"
-                        value={section_description}
-                        label="Descripción:"
-                        rows="5"
-                        placeholder={update.section_description}
-                        onChange={handleChange}
-                      />
-
-                      {
-                        (section_description,
-                        section_subtitle,
-                        section_title ? (
-                          <Button onClick={handleUpdate} type="submit">
-                            Actualizar Sección
-                          </Button>
-                        ) : (
-                          <DisabledButton disabled>
-                            Actualizar Sección
-                          </DisabledButton>
-                        ))
-                      }
-                      <br />
-                      <Button onClick={handleReturn} typs="button">
-                        Regresar
-                      </Button>
+                      {openMenu && <AboutEditMenu />}
                     </div>
-                  ))}
-                </CardBody>
-              </Card>
-            </ColumnRow>
-          </Row>
-        </Container>
-      </SectionColumn>
-      <div>
-        <AboutEditMenu />
-      </div>
+                    {updateValues.map((update) => (
+                      <div key={update.id}>
+                        <InputContainer>
+                          <TitleInput
+                            id="section_title"
+                            type="text"
+                            name="section_title"
+                            value={section_title}
+                            label="Titulo:"
+                            placeholder={update.section_title}
+                            onChange={handleChange}
+                          />
+
+                          <Input
+                            id="section_subtitle"
+                            type="text"
+                            name="section_subtitle"
+                            value={section_subtitle}
+                            label="Subtitulo:"
+                            placeholder={update.section_subtitle}
+                            onChange={handleChange}
+                          />
+
+                          <TextArea
+                            id="section_description"
+                            type="textarea"
+                            name="section_description"
+                            value={section_description}
+                            label="Descripción:"
+                            rows="5"
+                            placeholder={update.section_description}
+                            onChange={handleChange}
+                          />
+                        </InputContainer>
+                        {
+                          (section_description,
+                          section_subtitle,
+                          section_title ? (
+                            <Button onClick={handleUpdate} type="submit">
+                              Actualizar Sección
+                            </Button>
+                          ) : (
+                            <DisabledButton disabled>
+                              Actualizar Sección
+                            </DisabledButton>
+                          ))
+                        }
+                        <br />
+                        <Button onClick={handleReturn} typs="button">
+                          Regresar
+                        </Button>
+                      </div>
+                    ))}
+                  </AddFormBody>
+                </Column>
+              </Row>
+            </Container>
+          </FullSection>
+        </>
+      ) : (
+        <PrivateMessage />
+      )}
     </>
   )
 }

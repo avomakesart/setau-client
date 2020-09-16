@@ -19,6 +19,7 @@ export default function AboutEditMenu() {
     }
   }
 
+
   return (
     <Sidebar>
       <NavLink

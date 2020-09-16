@@ -11,6 +11,15 @@ export const Section = styled.div`
   width: 100%;
 `
 
+export const FullSection = styled.div`
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  width: 100%;
+`
+
 export const MidSection = styled.div`
   flex: 1 1 auto;
   display: flex;
@@ -29,11 +38,11 @@ export const Container = styled.div`
   margin-left: auto;
 
   @media (min-width: 768px) {
-    max-width: 540px;
+    max-width: 768px;
   }
 
   @media (min-width: 992px) {
-    max-width: 720px;
+    max-width: 992px;
   }
 `
 
@@ -90,6 +99,13 @@ export const CardBody = styled.div`
   margin: 0 auto;
 `
 
+export const AddFormBody = styled.div`
+  flex: 1 1 auto;
+  position: relative;
+  margin: 5rem auto;
+  width: 100%;
+`
+
 export const CardTitle = styled.div`
   font-size: 1.125rem;
   line-height: 1.2;
@@ -138,7 +154,7 @@ export const Button = styled.button`
   text-decoration: none;
   font-weight: 600;
   letter-spacing: 0.03em;
-  font-size: 0.8125rem;
+  font-size: 16px;
   min-width: 2.375rem;
   cursor: pointer;
   text-align: center;
@@ -186,7 +202,7 @@ export const DisabledButton = styled.button`
   text-decoration: none;
   font-weight: 600;
   letter-spacing: 0.03em;
-  font-size: 0.8125rem;
+  font-size: 16px;
   min-width: 2.375rem;
   cursor: pointer;
   text-align: center;
@@ -198,6 +214,7 @@ export const DisabledButton = styled.button`
   border-radius: 3px;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
     border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  width: 100%;
 `
 
 export const MessageContainer = styled.div`
@@ -264,4 +281,11 @@ export const IconImage = styled.img`
   max-width: 100%;
 `
 
+export const Editor = styled.div`
+  border: 1px solid black;
+  border-radius: 5px;
+`
 
+export const AddPostBtnContainer = styled.div`
+  margin-top: 3rem;
+`

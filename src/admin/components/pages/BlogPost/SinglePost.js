@@ -4,6 +4,9 @@ import Swal from 'sweetalert2'
 import moment from 'moment'
 import { fetchData } from '../../../../helpers/fetch'
 import Navbar from '../../ui/Navbar/Navbar'
+import authService from '../../../../services/auth-service'
+import { PrivateMessage } from '../../hoc/PrivateMessage'
+
 import {
   Container,
   FeaturedImage,
@@ -21,6 +24,8 @@ export default function SinglePostAdmin() {
 
   const [singlePost, setSinglePost] = useState([])
   const [comments, setComments] = useState([])
+  const [showAdminBoard, setShowAdminBoard] = useState(false)
+  const [, setCurrentUser] = useState(undefined)
 
   const handleReturn = () => {
     if (history.length <= 2) {
@@ -91,46 +96,64 @@ export default function SinglePostAdmin() {
     })
   }
 
+  useEffect(() => {
+    const user = authService.getCurrentUser()
+
+    if (user) {
+      setCurrentUser(user)
+      setShowAdminBoard(user.roles.includes('ROLE_ADMIN'))
+    }
+  }, [])
+
   return (
-    <div>
-      <Navbar />
+    <>
+      {showAdminBoard ? (
+        <div>
+          <Navbar />
 
-      {singlePost.map((sp) => (
-        <Container key={sp.id}>
-          <SinglePostTitle className="animate__animated animate__fadeIn">
-            {sp.title}
-          </SinglePostTitle>
-          <DateContainer>
-            <p>{moment(`${sp.createdat}`).format('LL')} -</p>
-            <ReadTime>{sp.read_time} de lectura -</ReadTime>
-            <p> por: {sp.author_name}</p>
-          </DateContainer>
-          <FeaturedImage src={sp.featured_image} alt={sp.title} />
-          <p>{sp.content}</p>
-          <p>{sp.post_category}</p>
-          <ReturnButton onClick={handleReturn}>Regresar</ReturnButton>
-          <Separator />
-        </Container>
-      ))}
+          {singlePost.map((sp) => (
+            <Container key={sp.id}>
+              <SinglePostTitle className="animate__animated animate__fadeIn">
+                {sp.title}
+              </SinglePostTitle>
+              <DateContainer>
+                <p>{moment(`${sp.createdat}`).format('LL')} -</p>
+                <ReadTime>{sp.read_time} de lectura -</ReadTime>
+                <p> por: {sp.author_name}</p>
+              </DateContainer>
+              <FeaturedImage src={sp.featured_image} alt={sp.title} />
+              <div dangerouslySetInnerHTML={{ __html: sp.content }}></div>
+              <p>{sp.post_category}</p>
+              <ReturnButton onClick={handleReturn}>Regresar</ReturnButton>
+              <Separator />
+            </Container>
+          ))}
 
-      <Container>
-        <h4>
-          {comments.length > 0
-            ? `${comments.length} Comentarios`
-            : 'Aun no hay realizado comentarios'}
-        </h4>
-        {comments.map((comment) => (
-          <div key={comment.id}>
-            <h5>{comment.title}</h5>
-            <p>{comment.comment}</p>
-            <p>{moment(`${comment.publishedat}`).fromNow()}</p>
-            <DangerButton className="w-auto" onClick={() => handleDelete(comment.id)}>
-              Eliminar Comentario
-            </DangerButton>
-            <Separator />
-          </div>
-        ))}
-      </Container>
-    </div>
+          <Container>
+            <h4>
+              {comments.length > 0
+                ? `${comments.length} Comentarios`
+                : 'Aun no hay realizado comentarios'}
+            </h4>
+            {comments.map((comment) => (
+              <div key={comment.id}>
+                <h5>{comment.title}</h5>
+                <p>{comment.comment}</p>
+                <p>{moment(`${comment.publishedat}`).fromNow()}</p>
+                <DangerButton
+                  className="w-auto"
+                  onClick={() => handleDelete(comment.id)}
+                >
+                  Eliminar Comentario
+                </DangerButton>
+                <Separator />
+              </div>
+            ))}
+          </Container>
+        </div>
+      ) : (
+        <PrivateMessage />
+      )}
+    </>
   )
 }

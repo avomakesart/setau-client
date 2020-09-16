@@ -9,11 +9,16 @@ const GlobalStyle = createGlobalStyle`
     overflow-x: hidden;
     background-color: #fff;
   }
+  
   .wrapper {
     display: flex;
     max-width: 100%;
     min-height: 100vh;
     flex-direction: column;
+  }
+
+  a:visited {
+    color: inherit;
   }
 
   p {
@@ -57,6 +62,10 @@ const GlobalStyle = createGlobalStyle`
     text-transform: uppercase;
   }
 
+  img {
+    max-width: 100%;
+  }
+
   .center {
     text-align: center;
   }
@@ -72,6 +81,40 @@ const GlobalStyle = createGlobalStyle`
  .w-auto {
    width: auto;
  }
+
+.quill {
+  margin-top: 2rem;
+}
+
+ .ql-editor {
+   height: 300px;
+ }
+
+ .input-color-container {
+  position: relative;
+  overflow: hidden;
+  width: 40px;
+  height: 40px;
+  border: solid 2px #ddd;
+  border-radius: 40px;
+}
+
+.input-color {  position: absolute;
+  right: -8px;
+  top: -8px;
+  width: 56px;
+  height: 56px;
+  border: none;
+  }
+
+  /* Utilities */
+  .label-menu {
+    font-weight: 600;
+    display: inline-block;
+    margin-left: 5px;
+    vertical-align: middle;
+    text-transform: uppercase;
+  }
 `
 
 export default GlobalStyle

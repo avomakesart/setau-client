@@ -2,14 +2,38 @@ import React, { useState, useEffect } from 'react'
 import Swal from 'sweetalert2'
 import { fetchData } from '../../../../../../helpers/fetch'
 import { useForm } from '../../../../../../hooks/useForm'
-import Input from '../../../../../../components/ui/Input/Input'
 import Navbar from '../../../../ui/Navbar/Navbar'
-import { SectionColumn } from '../../../../ui/Section/Section'
-import { Card, CardBody, Button, DisabledButton } from '../../Home.styles'
 import EditMenu from '../../EditMenu'
+import Input from '../../../../ui/Input/Input'
+import TitleInput from '../../../../ui/Input/TitleInput'
+import authService from '../../../../../../services/auth-service'
+import { PrivateMessage } from '../../../../hoc/PrivateMessage'
+
+import { InputContainer, Label } from '../../../../ui/Input/Input.styles'
+
+import {
+  Button,
+  DisabledButton,
+  InputColorContainer,
+  InputColor,
+  Toggle,
+  ToggleText,
+  InputColorWrapper,
+} from '../../Home.styles'
+
+import {
+  FullSection,
+  Container,
+  Row,
+  Column,
+  AddFormBody,
+} from '../../../BlogPost/BlogPost.styles'
 
 export const UpdateCta = () => {
   const [updateValues, setUpdateValues] = useState([])
+  const [openMenu, setOpenMenu] = useState(false)
+  const [showAdminBoard, setShowAdminBoard] = useState(false)
+  const [, setCurrentUser] = useState(undefined)
   const [formValues, handleChange] = useForm({
     cta_button_color: '#ffffff',
     cta_button_background_color: '#191919',
@@ -82,84 +106,142 @@ export const UpdateCta = () => {
     }
   }, [])
 
+  const toggleMenu = () => {
+    return setOpenMenu(!openMenu)
+  }
+
+  useEffect(() => {
+    const user = authService.getCurrentUser()
+
+    if (user) {
+      setCurrentUser(user)
+      setShowAdminBoard(user.roles.includes('ROLE_ADMIN'))
+    }
+  }, [])
+
   return (
     <>
-      <Navbar />
-      <SectionColumn>
-        <Card>
-          <h4 className="center">Actualizar Acción del usuario</h4>
-          {updateValues.map((update) => (
-            <CardBody key={update.id}>
-              <Input
-                id="cta_title"
-                type="text"
-                name="cta_title"
-                value={cta_title}
-                label="Titulo"
-                placeholder={update.cta_title}
-                onChange={handleChange}
-              />
+      {showAdminBoard ? (
+        <>
+          <Navbar />
+          <FullSection>
+            <Container>
+              <Row>
+                <Column>
+                  <AddFormBody>
+                    <div
+                      style={{ display: 'flex', justifyContent: 'flex-end' }}
+                    >
+                      {!openMenu ? (
+                        <>
+                          <Toggle id="toggle" onClick={toggleMenu}>
+                            &#8801;
+                          </Toggle>
+                          <ToggleText onClick={toggleMenu}>Menu</ToggleText>
+                        </>
+                      ) : (
+                        <>
+                          <Toggle id="toggle" onClick={toggleMenu}>
+                            x
+                          </Toggle>
+                          <ToggleText onClick={toggleMenu}>Cerrar</ToggleText>
+                        </>
+                      )}
 
-              <Input
-                id="cta_subtitle"
-                type="text"
-                name="cta_subtitle"
-                value={cta_subtitle}
-                label="Titulo"
-                placeholder={update.cta_subtitle}
-                onChange={handleChange}
-              />
+                      {openMenu && <EditMenu />}
+                    </div>
+                    {updateValues.map((update) => (
+                      <div key={update.id}>
+                        <InputContainer>
+                          <TitleInput
+                            id="cta_title"
+                            type="text"
+                            name="cta_title"
+                            value={cta_title}
+                            label="Titulo"
+                            placeholder={update.cta_title}
+                            onChange={handleChange}
+                          />
 
-              <Input
-                id="cta_button_text"
-                type="text"
-                name="cta_button_text"
-                value={cta_button_text}
-                label="Texto del boton:"
-                placeholder={update.cta_button_text}
-                onChange={handleChange}
-              />
+                          <Input
+                            id="cta_subtitle"
+                            type="text"
+                            name="cta_subtitle"
+                            value={cta_subtitle}
+                            label="Subtitulo"
+                            placeholder={update.cta_subtitle}
+                            onChange={handleChange}
+                          />
 
-              <Input
-                id="cta_button_color"
-                type="color"
-                name="cta_button_color"
-                value={cta_button_color}
-                label="Color del boton:"
-                placeholder={update.cta_button_color}
-                onChange={handleChange}
-              />
+                          <Input
+                            id="cta_button_text"
+                            type="text"
+                            name="cta_button_text"
+                            value={cta_button_text}
+                            label="Texto del boton:"
+                            placeholder={update.cta_button_text}
+                            onChange={handleChange}
+                          />
 
-              <Input
-                id="cta_button_background_color"
-                type="color"
-                name="cta_button_background_color"
-                value={cta_button_background_color}
-                label="Color de fondo del botón:"
-                placeholder={update.cta_button_background_color}
-                onChange={handleChange}
-              />
+                          <InputColorWrapper>
+                            <InputContainer>
+                              <Label>Color de texto del botón</Label>
+                              <InputColorContainer>
+                                <InputColor
+                                  id="cta_button_color"
+                                  type="color"
+                                  name="cta_button_color"
+                                  value={cta_button_color}
+                                  placeholder={update.cta_button_color}
+                                  onChange={handleChange}
+                                />
+                              </InputColorContainer>
+                            </InputContainer>
 
-              {
-                (cta_button_color,
-                cta_button_background_color,
-                cta_button_text,
-                cta_subtitle,
-                cta_title ? (
-                  <Button onClick={handleUpdate} type="submit">
-                    Actulizar Tarjeta
-                  </Button>
-                ) : (
-                  <DisabledButton disabled>Actulizar Tarjeta</DisabledButton>
-                ))
-              }
-            </CardBody>
-          ))}
-        </Card>
-      </SectionColumn>
-      <div>
-        <EditMenu />
-      </div>
+                            <InputContainer>
+                              <Label>Color de fondo del botón</Label>
+                              <InputColorContainer>
+                                <InputColor
+                                  id="cta_button_background_color"
+                                  type="color"
+                                  name="cta_button_background_color"
+                                  value={cta_button_background_color}
+                                  placeholder={
+                                    update.cta_button_background_color
+                                  }
+                                  onChange={handleChange}
+                                />
+                              </InputColorContainer>
+                            </InputContainer>
+                          </InputColorWrapper>
+                        </InputContainer>
+
+                        {
+                          (cta_button_color,
+                          cta_button_background_color,
+                          cta_button_text,
+                          cta_subtitle,
+                          cta_title ? (
+                            <Button onClick={handleUpdate} type="submit">
+                              Actulizar Tarjeta
+                            </Button>
+                          ) : (
+                            <DisabledButton disabled>
+                              Actulizar Tarjeta
+                            </DisabledButton>
+                          ))
+                        }
+                      </div>
+                    ))}
+                  </AddFormBody>
+                </Column>
+              </Row>
+            </Container>
+          </FullSection>
+        </>
+      ) : (
+        <PrivateMessage />
+      )}
     </>
   )
 }

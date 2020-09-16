@@ -5,6 +5,8 @@ import { ModalComponent } from '../../../../../../components/ui/Modal/ModalCompo
 import Navbar from '../../../../ui/Navbar/Navbar'
 import AboutEditMenu from '../../AboutEditMenu'
 import { AddClient } from './AddMember'
+import authService from '../../../../../../services/auth-service'
+import { PrivateMessage } from '../../../../hoc/PrivateMessage'
 
 import {
   HeadLineContainer,
@@ -14,19 +16,25 @@ import {
 } from '../TeamMembers/TeamMembers.styles'
 
 import {
-  Container,
-  Row,
   LinkButton,
   Card,
   CardBody,
   ButtonContainer,
   DangerButton,
-  Column,
-  MidSection,
   ValuesGrid,
   ValueCard,
   IconImage,
+  Toggle,
+  ToggleText,
 } from '../../About.styles'
+
+import {
+  FullSection,
+  Container,
+  Row,
+  Column,
+  AddFormBody,
+} from '../../../BlogPost/BlogPost.styles'
 
 const modalbuttonStyles = {
   color: '#fff',
@@ -48,7 +56,10 @@ const modalbuttonStyles = {
 
 export default function Clients() {
   const [clientSection, setClientSection] = useState([])
+  const [openMenu, setOpenMenu] = useState(false)
   const [clients, setClients] = useState([])
+  const [showAdminBoard, setShowAdminBoard] = useState(false)
+  const [, setCurrentUser] = useState(undefined)
 
   useEffect(() => {
     const abortController = new AbortController()
@@ -95,10 +106,9 @@ export default function Clients() {
     }).then((result) => {
       if (result.value) {
         Swal.fire('Borrado!', 'El cliente se a borrado.', 'success')
-        fetchData(`team_member/${id}`, {}, 'DELETE')
+        fetchData(`client/${id}`, {}, 'DELETE')
         const filteredClient = clients.filter((c) => c.id !== id)
-        setClientSection(filteredClient)
-        window.location.reload(true)
+        setClients(filteredClient)
       } else if (result.dismiss === Swal.DismissReason.cancel) {
         Swal.fire({
           title: 'Cancelado',
@@ -110,81 +120,127 @@ export default function Clients() {
     })
   }
 
+  const toggleMenu = () => {
+    return setOpenMenu(!openMenu)
+  }
+
+  useEffect(() => {
+    const user = authService.getCurrentUser()
+
+    if (user) {
+      setCurrentUser(user)
+      setShowAdminBoard(user.roles.includes('ROLE_ADMIN'))
+    }
+  }, [])
+
   return (
     <>
-      <Navbar />
-      <MidSection>
-        <Container>
-          <h4 className="center">Sección de Equipo</h4>
-          <Row>
-            <Column>
-              <Card>
-                <CardBody style={{ margin: 0 }}>
-                  {clientSection.map((ts) => (
-                    <div key={ts.id}>
-                      <HeadLineContainer>
-                        <SubHeadline>{ts.section_title}</SubHeadline>
-                        <Headline>{ts.section_subtitle}</Headline>
-                        <p>{ts.section_description}</p>
-                      </HeadLineContainer>
-                      <ButtonContainer>
-                        <LinkButton
-                          to={`/pages/nosotros/clientes/editar-seccion-${ts.id}`}
-                        >
-                          Editar Sección
-                        </LinkButton>
-                      </ButtonContainer>
+      {showAdminBoard ? (
+        <>
+          <Navbar />
+          <FullSection>
+            <Container>
+              <Row>
+                <Column>
+                  <AddFormBody>
+                    <div
+                      style={{ display: 'flex', justifyContent: 'flex-end' }}
+                    >
+                      {!openMenu ? (
+                        <>
+                          <Toggle id="toggle" onClick={toggleMenu}>
+                            &#8801;
+                          </Toggle>
+                          <ToggleText onClick={toggleMenu}>Menu</ToggleText>
+                        </>
+                      ) : (
+                        <>
+                          <Toggle id="toggle" onClick={toggleMenu}>
+                            x
+                          </Toggle>
+                          <ToggleText onClick={toggleMenu}>Cerrar</ToggleText>
+                        </>
+                      )}
+
+                      {openMenu && <AboutEditMenu />}
                     </div>
-                  ))}
-                </CardBody>
-              </Card>
+                    <h4 className="center">Sección de Equipo</h4>
+                    <Row>
+                      <Column>
+                        <Card>
+                          <CardBody style={{ margin: 0 }}>
+                            {clientSection.map((ts) => (
+                              <div key={ts.id}>
+                                <HeadLineContainer>
+                                  <SubHeadline>{ts.section_title}</SubHeadline>
+                                  <Headline>{ts.section_subtitle}</Headline>
+                                  <p>{ts.section_description}</p>
+                                </HeadLineContainer>
+                                <ButtonContainer>
+                                  <LinkButton
+                                    to={`/pages/nosotros/clientes/editar-seccion-${ts.id}`}
+                                  >
+                                    Editar Sección
+                                  </LinkButton>
+                                </ButtonContainer>
+                              </div>
+                            ))}
+                          </CardBody>
+                        </Card>
 
-              <Separator />
-              <h4 className="center">Nuevo Cliente</h4>
-              <Card>
-                <CardBody>
-                  <ModalComponent
-                    buttonText="Agregar Cliente"
-                    style={modalbuttonStyles}
-                  >
-                    <AddClient />
-                  </ModalComponent>
-                </CardBody>
-              </Card>
+                        <Separator />
+                        <h4 className="center">Nuevo Cliente</h4>
+                        <Card>
+                          <CardBody>
+                            <ModalComponent
+                              buttonText="Agregar Cliente"
+                              style={modalbuttonStyles}
+                            >
+                              <AddClient />
+                            </ModalComponent>
+                          </CardBody>
+                        </Card>
 
-              <Separator />
+                        <Separator />
 
-              {clients.map((c) => (
-                <Card key={c.id}>
-                  <CardBody style={{ margin: 0 }}>
-                    <ValuesGrid>
-                      <ValueCard>
-                        <IconImage src={c.client_image} alt="Client Icon" />
-                      </ValueCard>
-                      <ButtonContainer>
-                        <LinkButton
-                          to={`/pages/nosotros/clientes/editar-cliente-${c.id}`}
-                        >
-                          Editar Cliente
-                        </LinkButton>
-                        <DangerButton
-                          type="button"
-                          onClick={() => handleDelete(c.id)}
-                        >
-                          Eliminar Cliente
-                        </DangerButton>
-                      </ButtonContainer>
-                    </ValuesGrid>
-                  </CardBody>
-                </Card>
-              ))}
-            </Column>
-          </Row>
-        </Container>
-      </MidSection>
-      <div>
-        <AboutEditMenu />
-      </div>
+                        {clients.map((c) => (
+                          <Card key={c.id}>
+                            <CardBody style={{ margin: 0 }}>
+                              <ValuesGrid>
+                                <ValueCard>
+                                  <IconImage
+                                    src={c.client_image}
+                                    alt="Client Icon"
+                                  />
+                                </ValueCard>
+                                <ButtonContainer>
+                                  <LinkButton
+                                    to={`/pages/nosotros/clientes/editar-cliente-${c.id}`}
+                                  >
+                                    Editar Cliente
+                                  </LinkButton>
+                                  <DangerButton
+                                    type="button"
+                                    onClick={() => handleDelete(c.id)}
+                                  >
+                                    Eliminar Cliente
+                                  </DangerButton>
+                                </ButtonContainer>
+                              </ValuesGrid>
+                            </CardBody>
+                          </Card>
+                        ))}
+                      </Column>
+                    </Row>
+                  </AddFormBody>
+                </Column>
+              </Row>
+            </Container>
+          </FullSection>
+        </>
+      ) : (
+        <PrivateMessage />
+      )}
     </>
   )
 }

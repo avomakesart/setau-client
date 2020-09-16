@@ -93,6 +93,7 @@ export default function HomeScreen() {
                         backgroundColor:
                           card.homepage_card_button_background_color,
                       }}
+                      onClick={() => window.location.href = '/nosotros'}
                       primary
                     >
                       {card.homepage_card_button_text}
@@ -137,6 +138,7 @@ export default function HomeScreen() {
                           backgroundColor:
                             card.homepage_card_button_background_color,
                         }}
+                        onClick={() => window.location.href = '/nosotros'}
                         primary
                       >
                         {card.homepage_card_button_text}
@@ -172,6 +174,7 @@ export default function HomeScreen() {
                           backgroundColor:
                             card.homepage_card_button_background_color,
                         }}
+                        onClick={() => window.location.href = '/contacto'}
                         primary
                       >
                         {card.homepage_card_button_text}

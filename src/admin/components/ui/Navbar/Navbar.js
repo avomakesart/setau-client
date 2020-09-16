@@ -88,10 +88,6 @@ export default function Navbar() {
       id: 2,
       value: <DropItem to="/pages/add-post">Agregar Nuevo Post</DropItem>,
     },
-    {
-      id: 3,
-      value: <DropItem to="/pages/comments">Comentarios</DropItem>,
-    },
   ];
   
   

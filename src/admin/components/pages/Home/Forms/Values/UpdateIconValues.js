@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { fetchData } from '../../../../../../helpers/fetch'
 import Navbar from '../../../../ui/Navbar/Navbar'
-import { SectionColumn } from '../../../../ui/Section/Section'
+import authService from '../../../../../../services/auth-service'
+import { PrivateMessage } from '../../../../hoc/PrivateMessage'
+
 import {
   Card,
   CardBody,
@@ -11,12 +13,25 @@ import {
   ValuesGrid,
   ValueCard,
   IconImage,
+  Toggle,
+  ToggleText,
 } from '../../Home.styles'
 import Swal from 'sweetalert2'
 import EditMenu from '../../EditMenu'
 
+import {
+  FullSection,
+  Container,
+  Row,
+  Column,
+  AddFormBody,
+} from '../../../BlogPost/BlogPost.styles'
+
 export const UpdateIconValues = () => {
   const [updateValues, setUpdateValues] = useState([])
+  const [openMenu, setOpenMenu] = useState(false)
+  const [showAdminBoard, setShowAdminBoard] = useState(false)
+  const [, setCurrentUser] = useState(undefined)
 
   useEffect(() => {
     const abortController = new AbortController()
@@ -68,38 +83,89 @@ export const UpdateIconValues = () => {
     })
   }
 
+  const toggleMenu = () => {
+    return setOpenMenu(!openMenu)
+  }
+
+  useEffect(() => {
+    const user = authService.getCurrentUser()
+
+    if (user) {
+      setCurrentUser(user)
+      setShowAdminBoard(user.roles.includes('ROLE_ADMIN'))
+    }
+  }, [])
+
   return (
     <>
-      <Navbar />
-      <SectionColumn>
-        {updateValues.map((uv) => (
-          <Card key={uv.id}>
-            <CardBody>
-              <ValuesGrid>
-                <ValueCard key={uv.id}>
-                  <IconImage src={uv.icon_image} alt={uv.icon_title} />
-                  <h5>{uv.icon_title}</h5>
-                  <p>{uv.icon_description}</p>
-                </ValueCard>
-                <ButtonContainer>
-                  <LinkButton to={`/pages/home/edit-values-icons/${uv.id}`}>
-                    Actualizar Testimonial
-                  </LinkButton>
-                  <DangerButton
-                    type="button"
-                    onClick={() => handleDelete(uv.id)}
-                  >
-                    Eliminar Testimonial
-                  </DangerButton>
-                </ButtonContainer>
-              </ValuesGrid>
-            </CardBody>
-          </Card>
-        ))}
-      </SectionColumn>
-      <div>
-      <EditMenu />
-      </div>
+      {showAdminBoard ? (
+        <>
+          <Navbar />
+          <FullSection>
+            <Container>
+              <Row>
+                <Column>
+                  <AddFormBody>
+                    <div
+                      style={{ display: 'flex', justifyContent: 'flex-end' }}
+                    >
+                      {!openMenu ? (
+                        <>
+                          <Toggle id="toggle" onClick={toggleMenu}>
+                            &#8801;
+                          </Toggle>
+                          <ToggleText onClick={toggleMenu}>Menu</ToggleText>
+                        </>
+                      ) : (
+                        <>
+                          <Toggle id="toggle" onClick={toggleMenu}>
+                            x
+                          </Toggle>
+                          <ToggleText onClick={toggleMenu}>Cerrar</ToggleText>
+                        </>
+                      )}
+
+                      {openMenu && <EditMenu />}
+                    </div>
+                    {updateValues.map((uv) => (
+                      <Card key={uv.id}>
+                        <CardBody>
+                          <ValuesGrid>
+                            <ValueCard key={uv.id}>
+                              <IconImage
+                                src={uv.icon_image}
+                                alt={uv.icon_title}
+                              />
+                              <h5>{uv.icon_title}</h5>
+                              <p>{uv.icon_description}</p>
+                            </ValueCard>
+                            <ButtonContainer>
+                              <LinkButton
+                                to={`/pages/home/edit-values-icons/${uv.id}`}
+                              >
+                                Actualizar Icono
+                              </LinkButton>
+                              <br />
+                              <DangerButton
+                                type="button"
+                                onClick={() => handleDelete(uv.id)}
+                              >
+                                Eliminar Icono
+                              </DangerButton>
+                            </ButtonContainer>
+                          </ValuesGrid>
+                        </CardBody>
+                      </Card>
+                    ))}
+                  </AddFormBody>
+                </Column>
+              </Row>
+            </Container>
+          </FullSection>
+        </>
+      ) : (
+        <PrivateMessage />
+      )}
     </>
   )
 }

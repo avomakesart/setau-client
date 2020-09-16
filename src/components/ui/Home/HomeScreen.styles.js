@@ -57,7 +57,11 @@ export const MediumColumn = styled.div`
 
 export const CardContentContainer = styled.div`
   margin: 0 auto;
-  padding: 5rem;
+  padding: 2rem;
+
+  @media(min-width: 1000px) {
+    padding: 5rem;
+  }
 `
 
 export const ImageContainer = styled.img`

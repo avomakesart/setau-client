@@ -18,9 +18,10 @@ import {
   Row,
   Container,
   Section,
+  HeroTitle,
 } from './Contact.styles'
 
-export default function ContactScreen({ history }) {
+export default function ContactScreen() {
   const [userData, setData] = useState({
     name: '',
     lastname: '',
@@ -128,7 +129,7 @@ export default function ContactScreen({ history }) {
     <>
       <Navbar />
       <Section>
-        <h2 className="animate__animated animate__fadeIn">Contactanos</h2>
+        <HeroTitle className="animate__animated animate__fadeIn">Contactanos</HeroTitle>
         <Container>
           <Row>
             <Column>

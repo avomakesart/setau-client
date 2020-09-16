@@ -12,8 +12,13 @@ export const Container = styled.div`
   display: flex;
   align-items: center;
   color: white;
-  margin: 0 5rem;
-  height: 20rem;
+  margin: 0 3rem;
+  height: auto;
   position: relative;
   max-width: 1200px;
+
+  @media(min-width: 1000px) {
+    height: 20rem;
+    margin: 0 5rem;
+  }
 `

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { useParams, useHistory } from 'react-router-dom'
+import { useParams, useHistory, Link } from 'react-router-dom'
 import moment from 'moment'
 import { fetchData } from '../../../helpers/fetch'
 import { AddComment } from './AddComment'
 import { Comments } from './Comments'
 import Navbar from '../../ui/Navbar/Navbar'
+import AuthService from '../../../services/auth-service'
 import {
   Container,
   FeaturedImage,
@@ -14,8 +15,13 @@ import {
   Separator,
   ReturnButton,
 } from './SinglePost.styles'
+import InfoAlert from '../../ui/Alert/InfoAlert/InfoAlert'
 
 export default function SinglePost() {
+  const [, setShowModeratorBoard] = useState(false)
+  const [, setShowAdminBoard] = useState(false)
+  const [currentUser, setCurrentUser] = useState(undefined)
+
   const { id } = useParams()
   const history = useHistory()
 
@@ -64,6 +70,16 @@ export default function SinglePost() {
     }
   }, [id])
 
+  useEffect(() => {
+    const user = AuthService.getCurrentUser()
+
+    if (user) {
+      setCurrentUser(user)
+      setShowModeratorBoard(user.roles.includes('ROLE_MODERATOR'))
+      setShowAdminBoard(user.roles.includes('ROLE_ADMIN'))
+    }
+  }, [])
+
   return (
     <div>
       <Navbar />
@@ -78,13 +94,25 @@ export default function SinglePost() {
             <p> por: {sp.author_name}</p>
           </DateContainer>
           <FeaturedImage src={sp.featured_image} alt={sp.title} />
-          <p>{sp.content}</p>
+          <div>
+            <div dangerouslySetInnerHTML={{ __html: sp.content }}></div>
+          </div>
           <p>{sp.post_category}</p>
           <ReturnButton onClick={handleReturn}>Regresar</ReturnButton>
           <Separator />
 
           <Comments comments={comments} />
-          <AddComment />
+          {currentUser ? (
+            <AddComment />
+          ) : (
+            <div className="center">
+              <InfoAlert>
+                <h5>
+                  Inicia Sesión <Link to="/login">aqui</Link> para comentar
+                </h5>
+              </InfoAlert>
+            </div>
+          )}
         </Container>
       ))}
     </div>

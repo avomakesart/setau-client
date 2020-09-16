@@ -60,6 +60,8 @@ export default function Hero() {
                     backgroundColor: heroInfo.hero_button_background_color,
                   }}
                   m0Auto
+                  type="button"
+                  onClick={() => window.location.href = '/nosotros'}
                   className="animate__animated animate__fadeIn .2s"
                 >
                   {heroInfo.hero_button_text}

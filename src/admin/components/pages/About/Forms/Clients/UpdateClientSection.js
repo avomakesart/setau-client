@@ -8,6 +8,8 @@ import TextArea from '../../../../../../components/ui/TextArea/TextArea'
 import { SectionColumn } from '../../../../ui/Section/Section'
 import Navbar from '../../../../ui/Navbar/Navbar'
 import AboutEditMenu from '../../AboutEditMenu'
+import authService from '../../../../../../services/auth-service'
+import { PrivateMessage } from '../../../../hoc/PrivateMessage'
 
 import {
   Button,
@@ -21,6 +23,8 @@ import {
 
 export const UpdateClientSection = () => {
   const [updateValues, setUpdateValues] = useState([])
+  const [showAdminBoard, setShowAdminBoard] = useState(false)
+  const [, setCurrentUser] = useState(undefined)
   const [formValues, handleChange] = useForm({
     section_description: '',
     section_subtitle: '',
@@ -84,76 +88,91 @@ export const UpdateClientSection = () => {
     }
   }, [id])
 
+  useEffect(() => {
+    const user = authService.getCurrentUser()
+
+    if (user) {
+      setCurrentUser(user)
+      setShowAdminBoard(user.roles.includes('ROLE_ADMIN'))
+    }
+  }, [])
+
   return (
     <>
-      <Navbar />
-      <SectionColumn>
-        <Container>
-          <Row>
-            <ColumnRow>
-              <Card>
-                <CardBody>
-                  {updateValues.map((update) => (
-                    <div key={update.id}>
-                      <Input
-                        id="section_title"
-                        type="text"
-                        name="section_title"
-                        value={section_title}
-                        label="Titulo:"
-                        placeholder={update.section_title}
-                        onChange={handleChange}
-                      />
+      {showAdminBoard ? (
+        <>
+          <Navbar />
+          <SectionColumn>
+            <Container>
+              <Row>
+                <ColumnRow>
+                  <Card>
+                    <CardBody>
+                      {updateValues.map((update) => (
+                        <div key={update.id}>
+                          <Input
+                            id="section_title"
+                            type="text"
+                            name="section_title"
+                            value={section_title}
+                            label="Titulo:"
+                            placeholder={update.section_title}
+                            onChange={handleChange}
+                          />
 
-                      <Input
-                        id="section_subtitle"
-                        type="text"
-                        name="section_subtitle"
-                        value={section_subtitle}
-                        label="Subtitulo:"
-                        placeholder={update.section_subtitle}
-                        onChange={handleChange}
-                      />
+                          <Input
+                            id="section_subtitle"
+                            type="text"
+                            name="section_subtitle"
+                            value={section_subtitle}
+                            label="Subtitulo:"
+                            placeholder={update.section_subtitle}
+                            onChange={handleChange}
+                          />
 
-                      <TextArea
-                        id="section_description"
-                        type="textarea"
-                        name="section_description"
-                        value={section_description}
-                        label="Descripción:"
-                        rows="5"
-                        placeholder={update.section_description}
-                        onChange={handleChange}
-                      />
+                          <TextArea
+                            id="section_description"
+                            type="textarea"
+                            name="section_description"
+                            value={section_description}
+                            label="Descripción:"
+                            rows="5"
+                            placeholder={update.section_description}
+                            onChange={handleChange}
+                          />
 
-                      {
-                        (section_description,
-                        section_subtitle,
-                        section_title ? (
-                          <Button onClick={handleUpdate} type="submit">
-                            Actualizar Sección
+                          {
+                            (section_description,
+                            section_subtitle,
+                            section_title ? (
+                              <Button onClick={handleUpdate} type="submit">
+                                Actualizar Sección
+                              </Button>
+                            ) : (
+                              <DisabledButton disabled>
+                                Actualizar Sección
+                              </DisabledButton>
+                            ))
+                          }
+                          <br />
+                          <Button onClick={handleReturn} typs="button">
+                            Regresar
                           </Button>
-                        ) : (
-                          <DisabledButton disabled>
-                            Actualizar Sección
-                          </DisabledButton>
-                        ))
-                      }
-                      <br />
-                      <Button onClick={handleReturn} typs="button">
-                        Regresar
-                      </Button>
-                    </div>
-                  ))}
-                </CardBody>
-              </Card>
-            </ColumnRow>
-          </Row>
-        </Container>
-      </SectionColumn>
-      <div>
-        <AboutEditMenu />
-      </div>
+                        </div>
+                      ))}
+                    </CardBody>
+                  </Card>
+                </ColumnRow>
+              </Row>
+            </Container>
+          </SectionColumn>
+          <div>
+            <AboutEditMenu />
+          </div>
+        </>
+      ) : (
+        <PrivateMessage />
+      )}
     </>
   )
 }

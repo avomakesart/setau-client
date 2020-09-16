@@ -3,7 +3,11 @@ import styled from 'styled-components'
 export const Section = styled.section`
   width: 100%;
   max-width: 1200px;
-  margin: 7rem auto;
+  margin: 0 auto;
+
+  @media (min-width: 1000px) {
+    margin: 7rem auto;
+  }
 `
 
 export const Container = styled.div`
@@ -33,7 +37,7 @@ export const ClientCardContainer = styled.div`
 export const FullColumnsContainer = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 5rem auto 0;
+  margin: 0 auto;
   position: relative;
   box-sizing: border-box;
   --row-gap: calc(0 * 16pt);
@@ -45,6 +49,7 @@ export const FullColumnsContainer = styled.div`
 
   @media (min-width: 1000px) {
     flex-direction: row;
+    margin: 5rem auto 0;
   }
 `
 
@@ -76,7 +81,11 @@ export const MediumColumn = styled.div`
 
 export const CardContentContainer = styled.div`
   margin: 0 auto;
-  padding: 5rem;
+  padding: 1rem 0;
+
+  @media (min-width: 1000px) {
+    padding: 5rem;
+  }
 `
 
 export const ValuesContainer = styled.div`
@@ -190,6 +199,7 @@ export const ClientsContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 5rem;
+  margin-bottom: 5rem;
 `
 
 export const IconImage = styled.img`

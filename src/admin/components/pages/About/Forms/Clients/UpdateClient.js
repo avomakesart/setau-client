@@ -1,30 +1,31 @@
 import React, { useEffect, useState } from 'react'
 import Swal from 'sweetalert2'
 import { useParams, useHistory } from 'react-router-dom'
-import { useForm } from '../../../../../../hooks/useForm'
 import { fetchData } from '../../../../../../helpers/fetch'
-import Input from '../../../../../../components/ui/Input/Input'
-import { SectionColumn } from '../../../../ui/Section/Section'
 import Navbar from '../../../../ui/Navbar/Navbar'
+import Input from '../../../../ui/Input/Input'
+import { InputContainer } from '../../../../ui/Input/Input.styles'
 import AboutEditMenu from '../../AboutEditMenu'
+import authService from '../../../../../../services/auth-service'
+import { PrivateMessage } from '../../../../hoc/PrivateMessage'
+
+import { Button, DisabledButton, Toggle, ToggleText } from '../../About.styles'
 
 import {
-  Button,
-  DisabledButton,
+  FullSection,
   Container,
   Row,
-  ColumnRow,
-  Card,
-  CardBody,
-} from '../../About.styles'
+  Column,
+  AddFormBody,
+} from '../../../BlogPost/BlogPost.styles'
 
 export const UpdateClient = () => {
   const [updateValues, setUpdateValues] = useState([])
-  const [formValues, handleChange] = useForm({
-    client_image: '',
-  })
-
-  const { client_image } = formValues
+  const [openMenu, setOpenMenu] = useState(false)
+  const [client_image, setImage] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [showAdminBoard, setShowAdminBoard] = useState(false)
+  const [, setCurrentUser] = useState(undefined)
 
   const { id } = useParams()
   const history = useHistory()
@@ -79,51 +80,127 @@ export const UpdateClient = () => {
     }
   }, [id])
 
+  const toggleMenu = () => {
+    return setOpenMenu(!openMenu)
+  }
+
+  const uploadImage = async (e) => {
+    const files = e.target.files
+    const data = new FormData()
+    data.append('file', files[0])
+    data.append('upload_preset', 'setau_assets')
+    setLoading(true)
+    const res = await fetch(
+      'https://api.cloudinary.com/v1_1/bluecatencode/upload',
+      {
+        method: 'POST',
+        body: data,
+      }
+    )
+    const file = await res.json()
+
+    setImage(file.secure_url)
+    console.log(file.secure_url)
+    setLoading(false)
+  }
+
+  useEffect(() => {
+    const user = authService.getCurrentUser()
+
+    if (user) {
+      setCurrentUser(user)
+      setShowAdminBoard(user.roles.includes('ROLE_ADMIN'))
+    }
+  }, [])
+
   return (
     <>
-      <Navbar />
-      <SectionColumn>
-        <Container>
-          <Row>
-            <ColumnRow>
-              <Card>
-                <CardBody>
-                  {updateValues.map((update) => (
-                    <div key={update.id}>
-                      <Input
-                        id="client_image"
-                        type="text"
-                        name="client_image"
-                        value={client_image}
-                        label="Imagen:"
-                        placeholder={update.client_image}
-                        onChange={handleChange}
-                      />
-
-                      {client_image ? (
-                        <Button onClick={handleUpdate} type="submit">
-                          Actualizar Cliente
-                        </Button>
+      {showAdminBoard ? (
+        <>
+          <Navbar />
+          <FullSection>
+            <Container>
+              <Row>
+                <Column>
+                  <AddFormBody>
+                    <div
+                      style={{ display: 'flex', justifyContent: 'flex-end' }}
+                    >
+                      {!openMenu ? (
+                        <>
+                          <Toggle id="toggle" onClick={toggleMenu}>
+                            &#8801;
+                          </Toggle>
+                          <ToggleText onClick={toggleMenu}>Menu</ToggleText>
+                        </>
                       ) : (
-                        <DisabledButton disabled>
-                          Actualizar Cliente
-                        </DisabledButton>
+                        <>
+                          <Toggle id="toggle" onClick={toggleMenu}>
+                            x
+                          </Toggle>
+                          <ToggleText onClick={toggleMenu}>Cerrar</ToggleText>
+                        </>
                       )}
-                      <br />
-                      <Button onClick={handleReturn} typs="button">
-                        Regresar
-                      </Button>
+
+                      {openMenu && <AboutEditMenu />}
                     </div>
-                  ))}
-                </CardBody>
-              </Card>
-            </ColumnRow>
-          </Row>
-        </Container>
-      </SectionColumn>
-      <div>
-        <AboutEditMenu />
-      </div>
+                    {updateValues.map((update) => (
+                      <div key={update.id}>
+                        <InputContainer>
+                          <Input
+                            type="file"
+                            name="file"
+                            label="Imagen"
+                            placeholder="Upload an image"
+                            onChange={uploadImage}
+                          />
+
+                          <Input
+                            id="client_image"
+                            type="text"
+                            name="client_image"
+                            value={client_image}
+                            onChange={() => setImage}
+                            style={{ display: 'none' }}
+                          />
+                          {loading ? (
+                            <h3>Loading...</h3>
+                          ) : (
+                            <img
+                              src={update.client_image}
+                              style={{ width: '150px' }}
+                              alt="Client"
+                            />
+                          )}
+                          <br />
+                        </InputContainer>
+                        {client_image ? (
+                          <>
+                            <Button onClick={handleUpdate} type="submit">
+                              Actualizar Cliente
+                            </Button>
+                            <br />
+                          </>
+                        ) : (
+                          <DisabledButton disabled>
+                            Actualizar Cliente
+                          </DisabledButton>
+                        )}
+                        <br />
+                        <Button onClick={handleReturn} typs="button">
+                          Regresar
+                        </Button>
+                      </div>
+                    ))}
+                  </AddFormBody>
+                </Column>
+              </Row>
+            </Container>
+          </FullSection>
+        </>
+      ) : (
+        <PrivateMessage />
+      )}
     </>
   )
 }

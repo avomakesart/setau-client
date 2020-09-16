@@ -6,8 +6,8 @@ export const SidebarWrapper = styled.div`
   right: 0;
   padding: 48px 0 0;
   box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.1);
-  background: #d2d2d2;
-  width: 20%;
+  background: #ffffff;
+  width: 100%;
 `
 
 export const SidebarContainer = styled.div`
@@ -19,14 +19,27 @@ export const SidebarContainer = styled.div`
   overflow-y: hidden;
 `
 
-export const NavContainer = styled.nav`
-  display: flex;
-  -ms-flex-wrap: wrap;
-  flex-wrap: wrap;
-  padding-left: 0;
-  margin-bottom: 0;
-  list-style: none;
-  flex-direction: column !important;
+export const NavContainer = styled.div`
+  border: 1px solid #ccc;
+  height: auto;
+  padding: 2.3rem 2rem;
+  background-color: white;
+  color: white;
+  width: auto;
+  position: absolute;
+  z-index: 100;
+
+  @media screen and (max-height: 450px) {
+    padding-top: 15px;
+  }
+`
+
+export const CloseBtn = styled.a`
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
 `
 
 export const NavLinkContainer = styled.div`

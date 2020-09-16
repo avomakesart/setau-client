@@ -12,6 +12,7 @@ const Input = ({
   value,
   onChange,
   register,
+  style,
   ...inputProps
 }) => {
   return (
@@ -26,6 +27,7 @@ const Input = ({
         placeholder={placeholder}
         name={name}
         type={type}
+        style={style}
       />
     </FieldContainer>
   )

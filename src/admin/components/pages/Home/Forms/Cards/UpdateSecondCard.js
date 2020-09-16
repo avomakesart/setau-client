@@ -2,26 +2,46 @@ import React, { useState, useEffect } from 'react'
 import Swal from 'sweetalert2'
 import { fetchData } from '../../../../../../helpers/fetch'
 import { useForm } from '../../../../../../hooks/useForm'
-import Input from '../../../../../../components/ui/Input/Input'
-import TextArea from '../../../../../../components/ui/TextArea/TextArea'
+import Input from '../../../../ui/Input/Input'
+import TitleInput from '../../../../ui/Input/TitleInput'
+import { InputContainer, Label } from '../../../../ui/Input/Input.styles'
+import TextArea from '../../../../ui/TextArea/TextArea'
+import Navbar from '../../../../ui/Navbar/Navbar'
+import EditMenu from '../../EditMenu'
+import authService from '../../../../../../services/auth-service'
+import { PrivateMessage } from '../../../../hoc/PrivateMessage'
+
 import {
-  Card,
-  CardBody,
   Button,
   DisabledButton,
+  InputColorContainer,
+  InputColor,
+  Toggle,
+  ToggleText,
+  InputColorWrapper,
 } from '../../Home.styles'
-import Navbar from '../../../../ui/Navbar/Navbar'
-import { SectionColumn } from '../../../../ui/Section/Section'
-import EditMenu from '../../EditMenu'
+
+import {
+  FullSection,
+  Container,
+  Row,
+  Column,
+  AddFormBody,
+} from '../../../BlogPost/BlogPost.styles'
 
 export const UpdateSecondCard = () => {
   const [updateValues, setUpdateValues] = useState([])
+  const [openMenu, setOpenMenu] = useState(false)
+  const [homepage_card_img, setImage] = useState('')
+  const [, setLoading] = useState(false)
+  const [showAdminBoard, setShowAdminBoard] = useState(false)
+  const [, setCurrentUser] = useState(undefined)
   const [formValues, handleChange] = useForm({
     homepage_card_title: '',
     homepage_card_desc: '',
     homepage_card_button_text: '',
-    homepage_card_button_color: '',
-    homepage_card_img: '',
+    homepage_card_button_color: '#ffffff',
+    homepage_card_button_background_color: '#191919',
   })
 
   const {
@@ -29,7 +49,7 @@ export const UpdateSecondCard = () => {
     homepage_card_desc,
     homepage_card_button_text,
     homepage_card_button_color,
-    homepage_card_img,
+    homepage_card_button_background_color,
   } = formValues
 
   const id = updateValues.map((value) => value.id)
@@ -44,6 +64,7 @@ export const UpdateSecondCard = () => {
           homepage_card_desc,
           homepage_card_button_text,
           homepage_card_button_color,
+          homepage_card_button_background_color,
           homepage_card_img,
         },
         'PUT'
@@ -84,85 +105,183 @@ export const UpdateSecondCard = () => {
     }
   }, [])
 
+  const toggleMenu = () => {
+    return setOpenMenu(!openMenu)
+  }
+
+  const uploadImage = async (e) => {
+    const files = e.target.files
+    const data = new FormData()
+    data.append('file', files[0])
+    data.append('upload_preset', 'setau_assets')
+    setLoading(true)
+    const res = await fetch(
+      'https://api.cloudinary.com/v1_1/bluecatencode/upload',
+      {
+        method: 'POST',
+        body: data,
+      }
+    )
+    const file = await res.json()
+
+    setImage(file.secure_url)
+    console.log(file.secure_url)
+    setLoading(false)
+  }
+
+  useEffect(() => {
+    const user = authService.getCurrentUser()
+
+    if (user) {
+      setCurrentUser(user)
+      setShowAdminBoard(user.roles.includes('ROLE_ADMIN'))
+    }
+  }, [])
+
   return (
     <>
-      <Navbar />
-      <SectionColumn>
-        <Card>
-          <h4 className="center">Actualizar Segunda Tarjeta</h4>
-          {updateValues.map((update) => (
-            <CardBody key={update.id}>
-              <Input
-                id="second_homepage_card_img"
-                type="text"
-                name="homepage_card_img"
-                value={homepage_card_img}
-                label="Imagen:"
-                placeholder={update.homepage_card_img}
-                onChange={handleChange}
-              />
+      {showAdminBoard ? (
+        <>
+          <Navbar />
+          <FullSection>
+            <Container>
+              <Row>
+                <Column>
+                  <AddFormBody>
+                    <div
+                      style={{ display: 'flex', justifyContent: 'flex-end' }}
+                    >
+                      {!openMenu ? (
+                        <>
+                          <Toggle id="toggle" onClick={toggleMenu}>
+                            &#8801;
+                          </Toggle>
+                          <ToggleText onClick={toggleMenu}>Menu</ToggleText>
+                        </>
+                      ) : (
+                        <>
+                          <Toggle id="toggle" onClick={toggleMenu}>
+                            x
+                          </Toggle>
+                          <ToggleText onClick={toggleMenu}>Cerrar</ToggleText>
+                        </>
+                      )}
 
-              <Input
-                id="second_homepage_card_title"
-                type="text"
-                name="homepage_card_title"
-                value={homepage_card_title}
-                label="Titulo"
-                placeholder={update.homepage_card_title}
-                onChange={handleChange}
-              />
+                      {openMenu && <EditMenu />}
+                    </div>
+                    <h4 className="center">Actualizar Segunda Tarjeta</h4>
+                    {updateValues.map((update) => (
+                      <div key={update.id}>
+                        <InputContainer>
+                          <TitleInput
+                            id="second_homepage_card_title"
+                            type="text"
+                            name="homepage_card_title"
+                            value={homepage_card_title}
+                            label="Titulo"
+                            placeholder={update.homepage_card_title}
+                            onChange={handleChange}
+                          />
 
-              <TextArea
-                id="second_homepage_card_desc"
-                type="textarea"
-                name="homepage_card_desc"
-                value={homepage_card_desc}
-                label="Descripción:"
-                rows="5"
-                placeholder={update.homepage_card_desc}
-                onChange={handleChange}
-              />
+                          <Input
+                            type="file"
+                            name="file"
+                            label="Imagen"
+                            placeholder="Upload an image"
+                            onChange={uploadImage}
+                          />
 
-              <Input
-                id="second_homepage_card_button_text"
-                type="text"
-                name="homepage_card_button_text"
-                value={homepage_card_button_text}
-                label="Texto del boton:"
-                placeholder={update.homepage_card_button_text}
-                onChange={handleChange}
-              />
+                          <Input
+                            id="second_homepage_card_img"
+                            type="text"
+                            name="homepage_card_img"
+                            value={homepage_card_img}
+                            placeholder={update.homepage_card_img}
+                            onChange={handleChange}
+                            style={{ display: 'none' }}
+                          />
 
-              <Input
-                id="second_homepage_card_button_color"
-                type="text"
-                name="homepage_card_button_color"
-                value={homepage_card_button_color}
-                label="Color del boton:"
-                placeholder={update.homepage_card_button_color}
-                onChange={handleChange}
-              />
+                          <TextArea
+                            id="second_homepage_card_desc"
+                            type="textarea"
+                            name="homepage_card_desc"
+                            value={homepage_card_desc}
+                            label="Descripción:"
+                            rows="5"
+                            placeholder={update.homepage_card_desc}
+                            onChange={handleChange}
+                          />
 
-              {
-                (homepage_card_title,
-                homepage_card_desc,
-                homepage_card_button_text,
-                homepage_card_button_color,
-                homepage_card_img ? (
-                  <Button onClick={handleUpdate} type="submit">
-                    Actulizar Tarjeta
-                  </Button>
-                ) : (
-                  <DisabledButton disabled>Actulizar Tarjeta</DisabledButton>
-                ))
-              }
-            </CardBody>
-          ))}
-        </Card>
-      </SectionColumn>
-      <div>
-      <EditMenu />
-      </div>
+                          <Input
+                            id="second_homepage_card_button_text"
+                            type="text"
+                            name="homepage_card_button_text"
+                            value={homepage_card_button_text}
+                            label="Texto del boton:"
+                            placeholder={update.homepage_card_button_text}
+                            onChange={handleChange}
+                          />
+
+                          <InputColorWrapper>
+                            <InputContainer>
+                              <Label>Color de texto del botón</Label>
+                              <InputColorContainer>
+                                <InputColor
+                                  id="homepage_card_button_color"
+                                  type="color"
+                                  name="homepage_card_button_color"
+                                  value={homepage_card_button_color}
+                                  placeholder={
+                                    update.homepage_card_button_color
+                                  }
+                                  onChange={handleChange}
+                                />
+                              </InputColorContainer>
+                            </InputContainer>
+
+                            <InputContainer>
+                              <Label>Color de fondo del botón</Label>
+                              <InputColorContainer>
+                                <InputColor
+                                  id="homepage_card_button_background_color"
+                                  type="color"
+                                  name="homepage_card_button_background_color"
+                                  value={homepage_card_button_background_color}
+                                  placeholder={
+                                    update.homepage_card_button_background_color
+                                  }
+                                  onChange={handleChange}
+                                />
+                              </InputColorContainer>
+                            </InputContainer>
+                          </InputColorWrapper>
+                        </InputContainer>
+                        {
+                          (homepage_card_title,
+                          homepage_card_desc,
+                          homepage_card_button_text,
+                          homepage_card_button_color,
+                          homepage_card_img ? (
+                            <Button onClick={handleUpdate} type="submit">
+                              Actulizar Tarjeta
+                            </Button>
+                          ) : (
+                            <DisabledButton disabled>
+                              Actulizar Tarjeta
+                            </DisabledButton>
+                          ))
+                        }
+                      </div>
+                    ))}
+                  </AddFormBody>
+                </Column>
+              </Row>
+            </Container>
+          </FullSection>
+        </>
+      ) : (
+        <PrivateMessage />
+      )}
     </>
   )
 }
